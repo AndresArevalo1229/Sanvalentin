@@ -1,0 +1,478 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1100" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="night-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#120a1a"/>
+      <stop offset="0.46" stop-color="#34223f"/>
+      <stop offset="1" stop-color="#66485f"/>
+    </linearGradient>
+
+    <linearGradient id="wall-shell" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ccb4c1"/>
+      <stop offset="0.56" stop-color="#ad8f9f"/>
+      <stop offset="1" stop-color="#7e6176"/>
+    </linearGradient>
+
+    <linearGradient id="wall-inner" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e7d2dd"/>
+      <stop offset="0.58" stop-color="#d0b2c2"/>
+      <stop offset="1" stop-color="#9f7d93"/>
+    </linearGradient>
+
+    <linearGradient id="floor-main" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a17b92"/>
+      <stop offset="0.6" stop-color="#785a70"/>
+      <stop offset="1" stop-color="#4f3549"/>
+    </linearGradient>
+
+    <linearGradient id="ledge-top" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#dfc5d4"/>
+      <stop offset="1" stop-color="#b88ea5"/>
+    </linearGradient>
+
+    <linearGradient id="ledge-face" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#916a81"/>
+      <stop offset="1" stop-color="#6a495f"/>
+    </linearGradient>
+
+    <linearGradient id="column-cap" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f0dce7"/>
+      <stop offset="1" stop-color="#b2879d"/>
+    </linearGradient>
+
+    <linearGradient id="column-shaft" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#f7edf3"/>
+      <stop offset="0.4" stop-color="#e8d1df"/>
+      <stop offset="1" stop-color="#a67891"/>
+    </linearGradient>
+
+    <linearGradient id="window-frame" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8a6078"/>
+      <stop offset="1" stop-color="#57384d"/>
+    </linearGradient>
+
+    <linearGradient id="window-core" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe9b5"/>
+      <stop offset="0.5" stop-color="#f5b787"/>
+      <stop offset="1" stop-color="#a35e71"/>
+    </linearGradient>
+
+    <linearGradient id="moon-beam" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="rgba(209, 228, 255, 0.44)"/>
+      <stop offset="1" stop-color="rgba(209, 228, 255, 0)"/>
+    </linearGradient>
+
+    <linearGradient id="banner-cloth" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8b3c62"/>
+      <stop offset="0.62" stop-color="#5f2345"/>
+      <stop offset="1" stop-color="#441833"/>
+    </linearGradient>
+
+    <linearGradient id="banner-trim" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f3d9ac"/>
+      <stop offset="1" stop-color="#ca9e65"/>
+    </linearGradient>
+
+    <linearGradient id="chandelier-metal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f5ddb5"/>
+      <stop offset="1" stop-color="#ae7a54"/>
+    </linearGradient>
+
+    <linearGradient id="chandelier-candle" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff5cf"/>
+      <stop offset="0.64" stop-color="#ffc878"/>
+      <stop offset="1" stop-color="#f08e49"/>
+    </linearGradient>
+
+    <radialGradient id="torch-glow" cx="50%" cy="46%" r="60%">
+      <stop offset="0" stop-color="rgba(255, 224, 160, 0.58)"/>
+      <stop offset="1" stop-color="rgba(255, 224, 160, 0)"/>
+    </radialGradient>
+
+    <linearGradient id="torch-core" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff6d4"/>
+      <stop offset="0.56" stop-color="#ffd183"/>
+      <stop offset="1" stop-color="#f0954f"/>
+    </linearGradient>
+
+    <linearGradient id="portal-frame" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c89bb4"/>
+      <stop offset="1" stop-color="#8c5f7a"/>
+    </linearGradient>
+
+    <linearGradient id="portal-inner" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5d3b4f"/>
+      <stop offset="1" stop-color="#2d1b2d"/>
+    </linearGradient>
+
+    <radialGradient id="portal-glow" cx="50%" cy="42%" r="64%">
+      <stop offset="0" stop-color="rgba(255, 220, 161, 0.54)"/>
+      <stop offset="1" stop-color="rgba(255, 220, 161, 0)"/>
+    </radialGradient>
+
+    <linearGradient id="route-base" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#da86ad"/>
+      <stop offset="1" stop-color="#8c4f70"/>
+    </linearGradient>
+
+    <linearGradient id="route-shine" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="rgba(255, 236, 201, 0.86)"/>
+      <stop offset="1" stop-color="rgba(255, 236, 201, 0.1)"/>
+    </linearGradient>
+
+    <linearGradient id="pad-top" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7ecf2"/>
+      <stop offset="1" stop-color="#dec0d0"/>
+    </linearGradient>
+
+    <linearGradient id="pad-left" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c893ae"/>
+      <stop offset="1" stop-color="#9f6b87"/>
+    </linearGradient>
+
+    <linearGradient id="pad-right" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#be89a5"/>
+      <stop offset="1" stop-color="#92607b"/>
+    </linearGradient>
+
+    <radialGradient id="cold-moonwash" cx="50%" cy="0%" r="72%">
+      <stop offset="0" stop-color="rgba(186, 214, 255, 0.2)"/>
+      <stop offset="1" stop-color="rgba(186, 214, 255, 0)"/>
+    </radialGradient>
+
+    <radialGradient id="warm-floor" cx="50%" cy="95%" r="42%">
+      <stop offset="0" stop-color="rgba(255, 203, 164, 0.2)"/>
+      <stop offset="1" stop-color="rgba(255, 203, 164, 0)"/>
+    </radialGradient>
+
+    <radialGradient id="vignette" cx="50%" cy="56%" r="68%">
+      <stop offset="0" stop-color="rgba(24, 12, 28, 0)"/>
+      <stop offset="1" stop-color="rgba(24, 12, 28, 0.44)"/>
+    </radialGradient>
+
+    <filter id="stone-grain" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="2" seed="25" result="grain"/>
+      <feColorMatrix
+        in="grain"
+        type="matrix"
+        values="0 0 0 0 0.4 0 0 0 0 0.32 0 0 0 0 0.38 0 0 0 0.1 0"
+        result="colored"
+      />
+      <feBlend in="SourceGraphic" in2="colored" mode="multiply"/>
+    </filter>
+
+    <filter id="stone-relief" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="14" result="disp"/>
+      <feDisplacementMap in="SourceGraphic" in2="disp" scale="1.1" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+
+    <filter id="soft-shadow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="5"/>
+    </filter>
+
+    <clipPath id="hall-clip">
+      <path d="M170 1004V236L338 102H1262L1430 236V1004Z"/>
+    </clipPath>
+
+    <symbol id="iso-column" viewBox="0 0 84 420">
+      <rect x="8" y="14" width="68" height="22" rx="8" fill="url(#column-cap)"/>
+      <rect x="18" y="36" width="48" height="330" rx="15" fill="url(#column-shaft)" stroke="rgba(98, 56, 77, 0.4)" stroke-width="1.4"/>
+      <rect x="24" y="44" width="8" height="314" rx="4" fill="rgba(255, 255, 255, 0.34)"/>
+      <rect x="18" y="366" width="48" height="22" rx="8" fill="url(#column-cap)"/>
+      <rect x="10" y="388" width="64" height="16" rx="8" fill="rgba(129, 87, 109, 0.84)"/>
+    </symbol>
+
+    <symbol id="ogive-window" viewBox="0 0 130 240">
+      <path d="M14 222V102a51 51 0 0 1 102 0v120Z" fill="url(#window-frame)"/>
+      <path d="M28 210V108a37 37 0 0 1 74 0v102Z" fill="url(#window-core)"/>
+      <path d="M65 108v102" stroke="rgba(255, 245, 210, 0.34)" stroke-width="3"/>
+      <path d="M34 160h62" stroke="rgba(255, 238, 199, 0.26)" stroke-width="2"/>
+      <rect x="36" y="118" width="8" height="68" rx="4" fill="rgba(255, 255, 255, 0.22)"/>
+    </symbol>
+
+    <symbol id="castle-banner" viewBox="0 0 88 224">
+      <rect x="8" y="8" width="72" height="12" rx="6" fill="url(#banner-trim)"/>
+      <path d="M20 22h48v156l-24 30-24-30Z" fill="url(#banner-cloth)" stroke="rgba(39, 15, 30, 0.32)" stroke-width="1.3"/>
+      <path d="M44 22v184" stroke="rgba(250, 225, 171, 0.3)" stroke-width="2"/>
+      <path d="M20 52h48" stroke="rgba(243, 218, 165, 0.34)" stroke-width="2"/>
+    </symbol>
+
+    <symbol id="chandelier" viewBox="-120 -20 240 220">
+      <path d="M0 -8v56" stroke="url(#chandelier-metal)" stroke-width="5" stroke-linecap="round"/>
+      <ellipse cx="0" cy="70" rx="68" ry="16" fill="url(#chandelier-metal)"/>
+      <path d="M-68 70c14 36 122 36 136 0" fill="none" stroke="rgba(167, 114, 80, 0.72)" stroke-width="4"/>
+      <ellipse cx="0" cy="96" rx="84" ry="38" fill="rgba(255, 221, 165, 0.15)"/>
+      <g fill="url(#chandelier-candle)">
+        <ellipse cx="-52" cy="64" rx="6" ry="10"/>
+        <ellipse cx="-26" cy="58" rx="6" ry="10"/>
+        <ellipse cx="0" cy="56" rx="6" ry="10"/>
+        <ellipse cx="26" cy="58" rx="6" ry="10"/>
+        <ellipse cx="52" cy="64" rx="6" ry="10"/>
+      </g>
+    </symbol>
+
+    <symbol id="wall-torch" viewBox="-24 -58 48 118">
+      <ellipse cx="0" cy="2" rx="50" ry="38" fill="url(#torch-glow)" filter="url(#soft-shadow)"/>
+      <rect x="-8" y="-34" width="16" height="36" rx="8" fill="rgba(72, 44, 40, 0.9)"/>
+      <ellipse cx="0" cy="-14" rx="9" ry="16" fill="url(#torch-core)"/>
+    </symbol>
+
+    <symbol id="room-portal" viewBox="-78 -118 156 160">
+      <ellipse cx="0" cy="36" rx="54" ry="14" fill="rgba(30, 14, 26, 0.34)"/>
+      <path d="M-56 34V-16a56 56 0 0 1 112 0v50Z" fill="url(#portal-frame)" stroke="rgba(68, 38, 55, 0.55)" stroke-width="2"/>
+      <path d="M-44 28V-12a44 44 0 0 1 88 0v40Z" fill="url(#portal-inner)"/>
+      <ellipse cx="0" cy="2" rx="30" ry="44" fill="url(#portal-glow)"/>
+      <path d="M-34 28V-8a34 34 0 0 1 68 0v36Z" fill="rgba(37, 20, 35, 0.54)"/>
+      <path d="M-24 -2h48" stroke="rgba(255, 229, 180, 0.24)" stroke-width="1.8"/>
+      <path d="M-44 28h88" stroke="rgba(212, 171, 191, 0.48)" stroke-width="2"/>
+    </symbol>
+  </defs>
+
+  <g id="bg">
+    <rect width="1600" height="1100" fill="url(#night-bg)"/>
+
+    <path
+      d="M170 1004V236L338 102H1262L1430 236V1004Z"
+      fill="url(#wall-shell)"
+      stroke="rgba(62, 34, 52, 0.72)"
+      stroke-width="8"
+      filter="url(#stone-relief)"
+    />
+
+    <path d="M224 958V270L370 166H1230L1376 270V958Z" fill="url(#wall-inner)" filter="url(#stone-grain)"/>
+
+    <g clip-path="url(#hall-clip)">
+      <path d="M256 960h1088l-228-252H484Z" fill="url(#floor-main)"/>
+
+      <g opacity="0.16" stroke="rgba(74, 44, 60, 0.66)" stroke-width="2">
+        <path d="M288 936h1024"/>
+        <path d="M310 890h980"/>
+        <path d="M336 844h928"/>
+        <path d="M366 798h868"/>
+        <path d="M398 752h804"/>
+      </g>
+
+      <g opacity="0.1" stroke="rgba(85, 52, 70, 0.58)" stroke-width="1.6">
+        <path d="M342 950 620 708"/>
+        <path d="M500 950 760 708"/>
+        <path d="M658 950 900 708"/>
+        <path d="M816 950 1040 708"/>
+        <path d="M974 950 1180 708"/>
+      </g>
+
+      <g opacity="0.08" stroke="rgba(88, 54, 73, 0.55)" stroke-width="2">
+        <path d="M292 324h1016"/>
+        <path d="M306 474h988"/>
+        <path d="M322 624h956"/>
+      </g>
+
+      <g opacity="0.24" stroke="rgba(58, 30, 45, 0.5)" stroke-width="3" stroke-linecap="round">
+        <path d="M412 358 428 346 444 354"/>
+        <path d="M998 516 1014 502 1032 512"/>
+        <path d="M726 708 738 692 756 700"/>
+        <path d="M556 868 572 852 588 860"/>
+      </g>
+
+      <ellipse cx="238" cy="994" rx="210" ry="130" fill="rgba(33, 16, 33, 0.22)"/>
+      <ellipse cx="1362" cy="994" rx="210" ry="130" fill="rgba(33, 16, 33, 0.22)"/>
+      <ellipse cx="800" cy="250" rx="520" ry="170" fill="rgba(32, 18, 34, 0.18)"/>
+    </g>
+
+    <path d="M338 102h924" stroke="rgba(225, 194, 208, 0.74)" stroke-width="16" stroke-linecap="round"/>
+    <path d="M170 236h1260" stroke="rgba(143, 96, 123, 0.62)" stroke-width="10"/>
+    <path d="M170 1004h1260" stroke="rgba(85, 50, 73, 0.74)" stroke-width="10"/>
+  </g>
+
+  <g id="architecture">
+    <g opacity="0.9">
+      <g>
+        <path d="M248 892h1104l-50-38H298Z" fill="url(#ledge-top)"/>
+        <path d="M248 892h1104v16H248Z" fill="url(#ledge-face)"/>
+        <path d="M298 854h1004" stroke="rgba(255, 255, 255, 0.34)" stroke-width="2"/>
+        <path d="M254 908h1092" stroke="rgba(41, 20, 35, 0.26)" stroke-width="4"/>
+      </g>
+
+      <g>
+        <path d="M262 710h1076l-44-34H306Z" fill="url(#ledge-top)"/>
+        <path d="M262 710h1076v14H262Z" fill="url(#ledge-face)"/>
+        <path d="M306 676h988" stroke="rgba(255, 255, 255, 0.32)" stroke-width="2"/>
+        <path d="M268 724h1064" stroke="rgba(41, 20, 35, 0.24)" stroke-width="4"/>
+      </g>
+
+      <g>
+        <path d="M276 532h1048l-38-28H314Z" fill="url(#ledge-top)"/>
+        <path d="M276 532h1048v12H276Z" fill="url(#ledge-face)"/>
+        <path d="M314 504h972" stroke="rgba(255, 255, 255, 0.3)" stroke-width="1.8"/>
+        <path d="M282 544h1036" stroke="rgba(41, 20, 35, 0.22)" stroke-width="3.5"/>
+      </g>
+
+      <g>
+        <path d="M290 370h1020l-32-22H322Z" fill="url(#ledge-top)"/>
+        <path d="M290 370h1020v10H290Z" fill="url(#ledge-face)"/>
+        <path d="M322 348h956" stroke="rgba(255, 255, 255, 0.28)" stroke-width="1.6"/>
+        <path d="M296 380h1008" stroke="rgba(41, 20, 35, 0.2)" stroke-width="3"/>
+      </g>
+    </g>
+
+    <g opacity="0.8">
+      <use href="#iso-column" x="188" y="542" width="84" height="420"/>
+      <use href="#iso-column" x="298" y="560" width="77" height="386"/>
+      <use href="#iso-column" x="1180" y="560" width="77" height="386"/>
+      <use href="#iso-column" x="1288" y="542" width="84" height="420"/>
+    </g>
+
+    <g opacity="0.88">
+      <use href="#ogive-window" x="538" y="198" width="130" height="240"/>
+      <use href="#ogive-window" x="932" y="198" width="130" height="240"/>
+      <path d="M603 418 548 590h110Z" fill="url(#moon-beam)"/>
+      <path d="M997 418 942 590h110Z" fill="url(#moon-beam)"/>
+    </g>
+
+    <g opacity="0.86">
+      <use href="#castle-banner" x="438" y="286" width="88" height="224"/>
+      <use href="#castle-banner" x="1074" y="286" width="88" height="224"/>
+    </g>
+
+    <g opacity="0.66">
+      <use href="#chandelier" x="680" y="146" width="240" height="220"/>
+    </g>
+
+    <g opacity="0.72">
+      <use href="#wall-torch" x="236" y="278" width="48" height="118"/>
+      <use href="#wall-torch" x="1316" y="278" width="48" height="118"/>
+      <use href="#wall-torch" x="236" y="502" width="48" height="118"/>
+      <use href="#wall-torch" x="1316" y="502" width="48" height="118"/>
+    </g>
+
+    <g opacity="0.88">
+      <use href="#room-portal" x="230" y="734" width="156" height="160"/>
+      <use href="#room-portal" x="550" y="724" width="152.88" height="156.8"/>
+      <use href="#room-portal" x="868" y="702" width="152.88" height="156.8"/>
+      <use href="#room-portal" x="1151.12" y="582.4" width="149.76" height="153.6"/>
+      <use href="#room-portal" x="915.9" y="506" width="148.2" height="152"/>
+      <use href="#room-portal" x="581.9" y="484" width="148.2" height="152"/>
+      <use href="#room-portal" x="292.68" y="352.8" width="146.64" height="150.4"/>
+      <use href="#room-portal" x="584.24" y="243.44" width="143.52" height="147.2"/>
+      <use href="#room-portal" x="934.24" y="211.44" width="143.52" height="147.2"/>
+      <use href="#room-portal" x="744.2" y="57.2" width="140.4" height="144"/>
+    </g>
+  </g>
+
+  <g id="route">
+    <path
+      d="M288 914 608 902 928 880 1216 759 976 682 640 660 352 528 640 407 992 374 800 220"
+      fill="none"
+      stroke="url(#route-base)"
+      stroke-width="34"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      opacity="0.66"
+    />
+    <path
+      d="M288 914 608 902 928 880 1216 759 976 682 640 660 352 528 640 407 992 374 800 220"
+      fill="none"
+      stroke="url(#route-shine)"
+      stroke-width="13"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      opacity="0.9"
+    />
+  </g>
+
+  <g id="pads">
+    <g id="pad-1" transform="translate(288 914)">
+      <ellipse cx="0" cy="22" rx="64" ry="15" fill="rgba(45, 24, 37, 0.34)" filter="url(#soft-shadow)"/>
+      <polygon points="0 -20 64 0 0 20 -64 0" fill="url(#pad-top)" stroke="rgba(112, 64, 88, 0.66)" stroke-width="2"/>
+      <polygon points="-64 0 0 20 0 34 -64 14" fill="url(#pad-left)"/>
+      <polygon points="64 0 0 20 0 34 64 14" fill="url(#pad-right)"/>
+      <path d="M-44 -2h88" stroke="rgba(255, 255, 255, 0.46)" stroke-width="2"/>
+    </g>
+
+    <g id="pad-2" transform="translate(608 902)">
+      <ellipse cx="0" cy="22" rx="64" ry="15" fill="rgba(45, 24, 37, 0.34)" filter="url(#soft-shadow)"/>
+      <polygon points="0 -20 64 0 0 20 -64 0" fill="url(#pad-top)" stroke="rgba(112, 64, 88, 0.66)" stroke-width="2"/>
+      <polygon points="-64 0 0 20 0 34 -64 14" fill="url(#pad-left)"/>
+      <polygon points="64 0 0 20 0 34 64 14" fill="url(#pad-right)"/>
+      <path d="M-44 -2h88" stroke="rgba(255, 255, 255, 0.46)" stroke-width="2"/>
+    </g>
+
+    <g id="pad-3" transform="translate(928 880)">
+      <ellipse cx="0" cy="22" rx="64" ry="15" fill="rgba(45, 24, 37, 0.34)" filter="url(#soft-shadow)"/>
+      <polygon points="0 -20 64 0 0 20 -64 0" fill="url(#pad-top)" stroke="rgba(112, 64, 88, 0.66)" stroke-width="2"/>
+      <polygon points="-64 0 0 20 0 34 -64 14" fill="url(#pad-left)"/>
+      <polygon points="64 0 0 20 0 34 64 14" fill="url(#pad-right)"/>
+      <path d="M-44 -2h88" stroke="rgba(255, 255, 255, 0.46)" stroke-width="2"/>
+    </g>
+
+    <g id="pad-4" transform="translate(1216 759)">
+      <ellipse cx="0" cy="22" rx="64" ry="15" fill="rgba(45, 24, 37, 0.34)" filter="url(#soft-shadow)"/>
+      <polygon points="0 -20 64 0 0 20 -64 0" fill="url(#pad-top)" stroke="rgba(112, 64, 88, 0.66)" stroke-width="2"/>
+      <polygon points="-64 0 0 20 0 34 -64 14" fill="url(#pad-left)"/>
+      <polygon points="64 0 0 20 0 34 64 14" fill="url(#pad-right)"/>
+      <path d="M-44 -2h88" stroke="rgba(255, 255, 255, 0.46)" stroke-width="2"/>
+    </g>
+
+    <g id="pad-5" transform="translate(976 682)">
+      <ellipse cx="0" cy="22" rx="64" ry="15" fill="rgba(45, 24, 37, 0.34)" filter="url(#soft-shadow)"/>
+      <polygon points="0 -20 64 0 0 20 -64 0" fill="url(#pad-top)" stroke="rgba(112, 64, 88, 0.66)" stroke-width="2"/>
+      <polygon points="-64 0 0 20 0 34 -64 14" fill="url(#pad-left)"/>
+      <polygon points="64 0 0 20 0 34 64 14" fill="url(#pad-right)"/>
+      <path d="M-44 -2h88" stroke="rgba(255, 255, 255, 0.46)" stroke-width="2"/>
+    </g>
+
+    <g id="pad-6" transform="translate(640 660)">
+      <ellipse cx="0" cy="22" rx="64" ry="15" fill="rgba(45, 24, 37, 0.34)" filter="url(#soft-shadow)"/>
+      <polygon points="0 -20 64 0 0 20 -64 0" fill="url(#pad-top)" stroke="rgba(112, 64, 88, 0.66)" stroke-width="2"/>
+      <polygon points="-64 0 0 20 0 34 -64 14" fill="url(#pad-left)"/>
+      <polygon points="64 0 0 20 0 34 64 14" fill="url(#pad-right)"/>
+      <path d="M-44 -2h88" stroke="rgba(255, 255, 255, 0.46)" stroke-width="2"/>
+    </g>
+
+    <g id="pad-7" transform="translate(352 528)">
+      <ellipse cx="0" cy="22" rx="64" ry="15" fill="rgba(45, 24, 37, 0.34)" filter="url(#soft-shadow)"/>
+      <polygon points="0 -20 64 0 0 20 -64 0" fill="url(#pad-top)" stroke="rgba(112, 64, 88, 0.66)" stroke-width="2"/>
+      <polygon points="-64 0 0 20 0 34 -64 14" fill="url(#pad-left)"/>
+      <polygon points="64 0 0 20 0 34 64 14" fill="url(#pad-right)"/>
+      <path d="M-44 -2h88" stroke="rgba(255, 255, 255, 0.46)" stroke-width="2"/>
+    </g>
+
+    <g id="pad-8" transform="translate(640 407)">
+      <ellipse cx="0" cy="22" rx="64" ry="15" fill="rgba(45, 24, 37, 0.34)" filter="url(#soft-shadow)"/>
+      <polygon points="0 -20 64 0 0 20 -64 0" fill="url(#pad-top)" stroke="rgba(112, 64, 88, 0.66)" stroke-width="2"/>
+      <polygon points="-64 0 0 20 0 34 -64 14" fill="url(#pad-left)"/>
+      <polygon points="64 0 0 20 0 34 64 14" fill="url(#pad-right)"/>
+      <path d="M-44 -2h88" stroke="rgba(255, 255, 255, 0.46)" stroke-width="2"/>
+    </g>
+
+    <g id="pad-9" transform="translate(992 374)">
+      <ellipse cx="0" cy="22" rx="64" ry="15" fill="rgba(45, 24, 37, 0.34)" filter="url(#soft-shadow)"/>
+      <polygon points="0 -20 64 0 0 20 -64 0" fill="url(#pad-top)" stroke="rgba(112, 64, 88, 0.66)" stroke-width="2"/>
+      <polygon points="-64 0 0 20 0 34 -64 14" fill="url(#pad-left)"/>
+      <polygon points="64 0 0 20 0 34 64 14" fill="url(#pad-right)"/>
+      <path d="M-44 -2h88" stroke="rgba(255, 255, 255, 0.46)" stroke-width="2"/>
+    </g>
+
+    <g id="pad-10" transform="translate(800 220)">
+      <ellipse cx="0" cy="22" rx="64" ry="15" fill="rgba(45, 24, 37, 0.34)" filter="url(#soft-shadow)"/>
+      <polygon points="0 -20 64 0 0 20 -64 0" fill="url(#pad-top)" stroke="rgba(112, 64, 88, 0.66)" stroke-width="2"/>
+      <polygon points="-64 0 0 20 0 34 -64 14" fill="url(#pad-left)"/>
+      <polygon points="64 0 0 20 0 34 64 14" fill="url(#pad-right)"/>
+      <path d="M-44 -2h88" stroke="rgba(255, 255, 255, 0.46)" stroke-width="2"/>
+    </g>
+  </g>
+
+  <g id="fx">
+    <rect x="160" y="90" width="1280" height="940" fill="url(#cold-moonwash)"/>
+    <ellipse cx="800" cy="998" rx="420" ry="138" fill="url(#warm-floor)"/>
+    <rect x="180" y="160" width="1240" height="840" fill="url(#vignette)"/>
+
+    <g opacity="0.2" fill="rgba(255, 238, 206, 0.7)">
+      <circle cx="454" cy="218" r="3"/>
+      <circle cx="612" cy="172" r="2.4"/>
+      <circle cx="746" cy="242" r="2.8"/>
+      <circle cx="936" cy="196" r="2.6"/>
+      <circle cx="1114" cy="236" r="3"/>
+      <circle cx="522" cy="472" r="2.4"/>
+      <circle cx="1028" cy="446" r="2.6"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="stairBase" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f5d9e6"/>
+      <stop offset="1" stop-color="#c38aa5"/>
+    </linearGradient>
+    <linearGradient id="stepShade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="rgba(255,255,255,0.5)"/>
+      <stop offset="1" stop-color="rgba(122,45,74,0.3)"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="256" height="256" fill="url(#stairBase)"/>
+
+  <g>
+    <rect x="0" y="0" width="256" height="26" fill="url(#stepShade)"/>
+    <rect x="0" y="32" width="256" height="26" fill="url(#stepShade)"/>
+    <rect x="0" y="64" width="256" height="26" fill="url(#stepShade)"/>
+    <rect x="0" y="96" width="256" height="26" fill="url(#stepShade)"/>
+    <rect x="0" y="128" width="256" height="26" fill="url(#stepShade)"/>
+    <rect x="0" y="160" width="256" height="26" fill="url(#stepShade)"/>
+    <rect x="0" y="192" width="256" height="26" fill="url(#stepShade)"/>
+    <rect x="0" y="224" width="256" height="26" fill="url(#stepShade)"/>
+  </g>
+
+  <path d="M0 30h256M0 62h256M0 94h256M0 126h256M0 158h256M0 190h256M0 222h256" stroke="rgba(115,43,71,0.28)" stroke-width="2"/>
+  <path d="M56 0v256M200 0v256" stroke="rgba(243,214,227,0.38)" stroke-width="4"/>
+</svg>

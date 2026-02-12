@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 72" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="doorReached" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c8859d"/>
+      <stop offset="1" stop-color="#8f4f66"/>
+    </linearGradient>
+  </defs>
+  <path d="M8 68V22c0-9 7.2-16 16-16s16 7 16 16v46Z" fill="url(#doorReached)" stroke="#8f4f66" stroke-width="2"/>
+  <path d="M24 9v56" stroke="rgba(255,233,192,.34)" stroke-width="2"/>
+  <circle cx="30" cy="38" r="3" fill="#f1d58f"/>
+</svg>
