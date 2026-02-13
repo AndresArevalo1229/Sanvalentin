@@ -19,6 +19,18 @@ npm run dist:win
 npm run dist:win:portable
 ```
 
+Modo desarrollo en Windows:
+
+```bash
+npm run dev:win
+```
+
+Modo desarrollo seguro en Windows (si ves pantalla negra/parpadeos):
+
+```bash
+npm run dev:win:safe
+```
+
 Archivos que genera:
 
 - `release/San Valentin Andrea Setup 1.0.0.exe` (instalador, incluye desinstalador)
