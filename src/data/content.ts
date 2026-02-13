@@ -70,10 +70,10 @@ export type ContentData = {
 };
 
 const photosCita: string[] = [
-  asset("photos/cita primera vez navideña/foto primera cita navideña.jpeg"),
-  asset("photos/cita primera vez navideña/IMG_1153.jpeg"),
-  asset("photos/cita primera vez navideña/IMG_1156.jpeg"),
-  asset("photos/cita primera vez navideña/IMG_1159.jpeg")
+  asset("photos/cita primera vez navideña/foto primera cita navideña.jpeg"),
+  asset("photos/cita primera vez navideña/IMG_1153.jpeg"),
+  asset("photos/cita primera vez navideña/IMG_1156.jpeg"),
+  asset("photos/cita primera vez navideña/IMG_1159.jpeg")
 ];
 
 const photosDeclaracion: string[] = [
@@ -90,14 +90,14 @@ const photosDeclaracion: string[] = [
 ];
 
 const photosAniversario: string[] = [
-  asset("photos/1 año de novios 10 de enero acuario michin/IMG_9108.jpeg"),
-  asset("photos/1 año de novios 10 de enero acuario michin/IMG_9116.jpeg"),
-  asset("photos/1 año de novios 10 de enero acuario michin/IMG_9119.jpeg"),
-  asset("photos/1 año de novios 10 de enero acuario michin/IMG_9127.jpeg"),
-  asset("photos/1 año de novios 10 de enero acuario michin/IMG_9138.jpeg"),
-  asset("photos/1 año de novios 10 de enero acuario michin/IMG_9141.jpeg"),
-  asset("photos/1 año de novios 10 de enero acuario michin/IMG_9146.jpeg"),
-  asset("photos/1 año de novios 10 de enero acuario michin/IMG_9147.jpeg")
+  asset("photos/1 año de novios 10 de enero acuario michin/IMG_9108.jpeg"),
+  asset("photos/1 año de novios 10 de enero acuario michin/IMG_9116.jpeg"),
+  asset("photos/1 año de novios 10 de enero acuario michin/IMG_9119.jpeg"),
+  asset("photos/1 año de novios 10 de enero acuario michin/IMG_9127.jpeg"),
+  asset("photos/1 año de novios 10 de enero acuario michin/IMG_9138.jpeg"),
+  asset("photos/1 año de novios 10 de enero acuario michin/IMG_9141.jpeg"),
+  asset("photos/1 año de novios 10 de enero acuario michin/IMG_9146.jpeg"),
+  asset("photos/1 año de novios 10 de enero acuario michin/IMG_9147.jpeg")
 ];
 
 const photosMomentos: string[] = [
@@ -107,9 +107,9 @@ const photosMomentos: string[] = [
 ];
 const firstDatePhoto = asset("photos/Momentos/c78b8497-1b25-44f5-9a9a-0ba403f5c59d.JPG");
 const secondDatePhoto = photosCita[1];
-const thirdDatePhoto = asset("photos/cita primera vez navideña/2fbdf4a3-3fe7-4668-aab2-7713b8b5d010.jpeg");
-const fourthDateMainPhoto = asset("photos/cita primera vez navideña/IMG_3384.jpg");
-const fourthDateAltPhoto = asset("photos/cita primera vez navideña/IMG_3382.jpg");
+const thirdDatePhoto = asset("photos/cita primera vez navideña/2fbdf4a3-3fe7-4668-aab2-7713b8b5d010.jpeg");
+const fourthDateMainPhoto = asset("photos/cita primera vez navideña/IMG_3384.jpg");
+const fourthDateAltPhoto = asset("photos/cita primera vez navideña/IMG_3382.jpg");
 const fifthDatePhoto = asset("photos/declaracion 10 de enero de 2025/1babefeb-6f68-49b0-b69b-ac7c4fce8858.jpeg");
 
 const photosPlayita: string[] = [
