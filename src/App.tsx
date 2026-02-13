@@ -79,7 +79,9 @@ export default function App() {
   const [roomAnimating, setRoomAnimating] = useState(false);
   const motionTimersRef = useRef<number[]>([]);
   const [motionIntensity, setMotionIntensity] = useState<MotionIntensity>(() => {
-    const fallback = animationVariant === "suave" ? "soft" : "normal";
+    const isWindowsRuntime =
+      typeof navigator !== "undefined" && navigator.userAgent.toLowerCase().includes("windows");
+    const fallback = animationVariant === "suave" || isWindowsRuntime ? "soft" : "normal";
     if (typeof window === "undefined") return fallback;
     const stored = window.localStorage.getItem(MOTION_INTENSITY_STORAGE_KEY);
     if (stored === "soft" || stored === "normal" || stored === "intense") return stored;
@@ -192,7 +194,7 @@ export default function App() {
   }, [updateAudioAnalysis]);
 
   useEffect(() => {
-    const shouldPublish = sectionOpen === "music";
+    const shouldPublish = sectionOpen === "music" || sectionOpen === "timeline";
     publishAudioReactiveRef.current = shouldPublish;
 
     if (!shouldPublish) {
@@ -226,6 +228,13 @@ export default function App() {
       source.connect(analyser);
       analyser.connect(context.destination);
 
+      context.onstatechange = () => {
+        if (context.state !== "suspended") return;
+        const currentAudio = audioRef.current;
+        if (!currentAudio || currentAudio.paused || currentAudio.ended) return;
+        void context.resume().catch(() => {});
+      };
+
       audioContextRef.current = context;
       analyserRef.current = analyser;
       mediaSourceRef.current = source;
@@ -239,11 +248,25 @@ export default function App() {
     return true;
   }, []);
 
+  const attemptResumePlayback = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio || audio.paused || audio.ended) return;
+
+    void ensureAudioGraph()
+      .then(() => audio.play())
+      .then(() => {
+        setMusicOn(true);
+        startAudioAnalysis();
+      })
+      .catch(() => {});
+  }, [ensureAudioGraph, startAudioAnalysis]);
+
   useEffect(() => {
     return () => {
       stopAudioAnalysis();
       const context = audioContextRef.current;
       if (context) {
+        context.onstatechange = null;
         void context.close();
       }
       audioContextRef.current = null;
@@ -272,9 +295,62 @@ export default function App() {
         setMusicOn(true);
         startAudioAnalysis();
       })
-      .catch(() => {});
+      .catch(() => {
+        setMusicOn(false);
+      });
     setPendingPlay(false);
   }, [pendingPlay, currentIndex, playlist, ensureAudioGraph, startAudioAnalysis]);
+
+  useEffect(() => {
+    const handleRestorePlayback = () => {
+      if (document.visibilityState === "hidden") return;
+      attemptResumePlayback();
+    };
+
+    document.addEventListener("visibilitychange", handleRestorePlayback);
+    window.addEventListener("focus", handleRestorePlayback);
+    window.addEventListener("pageshow", handleRestorePlayback);
+    window.addEventListener("pointerdown", handleRestorePlayback, { passive: true });
+    window.addEventListener("keydown", handleRestorePlayback);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleRestorePlayback);
+      window.removeEventListener("focus", handleRestorePlayback);
+      window.removeEventListener("pageshow", handleRestorePlayback);
+      window.removeEventListener("pointerdown", handleRestorePlayback);
+      window.removeEventListener("keydown", handleRestorePlayback);
+    };
+  }, [attemptResumePlayback]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || !musicOn) return;
+
+    let lastTime = audio.currentTime;
+    let stalledChecks = 0;
+    const watchdog = window.setInterval(() => {
+      const currentAudio = audioRef.current;
+      if (!currentAudio || currentAudio.paused || currentAudio.ended) {
+        stalledChecks = 0;
+        return;
+      }
+
+      const currentPosition = currentAudio.currentTime;
+      if (Math.abs(currentPosition - lastTime) > 0.05) {
+        lastTime = currentPosition;
+        stalledChecks = 0;
+        return;
+      }
+
+      stalledChecks += 1;
+      if (stalledChecks >= 3) {
+        stalledChecks = 0;
+        attemptResumePlayback();
+      }
+    }, 2000);
+
+    return () => window.clearInterval(watchdog);
+  }, [musicOn, currentIndex, attemptResumePlayback]);
 
   useEffect(() => {
     if (!playlist.length) return;
@@ -399,7 +475,9 @@ export default function App() {
         setMusicOn(true);
         startAudioAnalysis();
       })
-      .catch(() => {});
+      .catch(() => {
+        setMusicOn(false);
+      });
   };
 
   const handleIntro = () => {
@@ -425,7 +503,9 @@ export default function App() {
           setMusicOn(true);
           startAudioAnalysis();
         })
-        .catch(() => {});
+        .catch(() => {
+          setMusicOn(false);
+        });
     } else {
       audio.pause();
       setMusicOn(false);
@@ -574,6 +654,14 @@ export default function App() {
             setBeat(0);
             stopAudioAnalysis();
           }}
+          onWaiting={attemptResumePlayback}
+          onStalled={attemptResumePlayback}
+          onError={() => {
+            setMusicOn(false);
+            setBeat(0);
+            stopAudioAnalysis();
+            handleNext();
+          }}
         />
         <MusicToggle musicOn={musicOn} currentTrack={currentTrack} onToggle={toggleMusic} />
         <Hero
@@ -608,6 +696,10 @@ export default function App() {
         <SectionContent
           sectionId={sectionOpen}
           timeline={data.timeline}
+          timelineAudioLevels={audioLevels}
+          timelineBeat={beat}
+          timelineMusicOn={musicOn}
+          timelineMotionIntensity={motionIntensity}
           gallery={data.gallery}
           puzzleImages={data.puzzleImages}
           secretMessage={data.secretMessage}

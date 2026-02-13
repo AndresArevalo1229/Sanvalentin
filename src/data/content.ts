@@ -25,6 +25,7 @@ export type TimelineItem = {
   title: string;
   text: string;
   photo?: string;
+  photos?: string[];
 };
 
 export type GalleryPhoto = {
@@ -105,6 +106,11 @@ const photosMomentos: string[] = [
   asset("photos/Momentos/fc3b5ba5-dc33-4021-9bc9-abad856d8a10.jpeg")
 ];
 const firstDatePhoto = asset("photos/Momentos/c78b8497-1b25-44f5-9a9a-0ba403f5c59d.JPG");
+const secondDatePhoto = photosCita[1];
+const thirdDatePhoto = asset("photos/cita primera vez navideña/2fbdf4a3-3fe7-4668-aab2-7713b8b5d010.jpeg");
+const fourthDateMainPhoto = asset("photos/cita primera vez navideña/IMG_3384.jpg");
+const fourthDateAltPhoto = asset("photos/cita primera vez navideña/IMG_3382.jpg");
+const fifthDatePhoto = asset("photos/declaracion 10 de enero de 2025/1babefeb-6f68-49b0-b69b-ac7c4fce8858.jpeg");
 
 const photosPlayita: string[] = [
   asset("photos/playita/19957e32-3058-4da3-a0ec-4fd809f02e7b.jpeg"),
@@ -184,22 +190,27 @@ const data: ContentData = {
     {
       date: "13 de noviembre de 2024",
       title: "Nuestra primera salida",
-      text: "Ese dia fui feliz desde que te vi llegar. Estabas hermosa y yo iba nervioso, pero contigo todo se me hacia facil. Fuimos por telas, hubo momentos incomodos, pero aun asi lo convertiste en algo lindo. Entre risas, besos y miradas, confirme que queria cuidarte y estar contigo en serio."
+      text: "Ese dia fui feliz desde que te vi llegar. Estabas hermosa y yo iba nervioso, pero contigo todo se me hacia facil. Fuimos por telas, hubo momentos incomodos, pero aun asi lo convertiste en algo lindo. Entre risas, besos y miradas, confirme que queria cuidarte y estar contigo en serio.",
+      photo: secondDatePhoto
     },
     {
       date: "Diciembre de 2024",
-      title: "Cines, palomitas y mi cumple",
-      text: "Nuestras salidas al cine me enamoraron de ti todavia mas: tomarte de la mano, compartir palomitas y reirnos como ninos. De todos esos dias, uno de mis favoritos fue en tu cumple, cuando fuimos a ver Moana y te vi tan bonita que no podia dejar de admirarte."
+      title: "Cines, palomitas y tu cumple",
+      text: "Nuestras salidas al cine me enamoraron de ti todavia mas: tomarte de la mano, compartir palomitas y reirnos como ninos. De todos esos dias, uno de mis favoritos fue en tu cumple, cuando fuimos a ver Moana y te vi tan bonita que no podia dejar de admirarte.",
+      photo: thirdDatePhoto
     },
     {
       date: "Enero de 2025",
       title: "Noche de Hatsune Miku",
-      text: "Cuando fuimos a ver a Hatsune Miku supe que queria compartir mas mundo contigo. Verte convivir, sonreir y aun asi estar pendiente de mi me hizo sentir orgulloso de estar a tu lado. Ese dia entendi que contigo no solo queria momentos bonitos, queria una historia completa."
+      text: "Esa noche de Hatsune Miku me encanto porque, aun con los nervios de conocer mas gente, nunca me soltaste. Me hiciste sentir en casa entre luces, musica y risas. Verte sonreir ahi conmigo me confirmo que contigo quiero vivir cada aventura, desde las mas tranquilas hasta las mas intensas.",
+      photo: fourthDateMainPhoto,
+      photos: [fourthDateAltPhoto]
     },
     {
       date: "10 de enero de 2025",
-      title: "El dia que te pedi ser mi novia",
-      text: "Ese dia frio y lluvioso me temblaba el corazon, pero no la decision: queria que fueras tu. Cuando te pedi ser mi novia senti que el mundo se acomodaba en su lugar. Es uno de los recuerdos que mas cuido, porque ahi comenzo oficialmente nuestra historia."
+      title: "La promesa bajo la lluvia",
+      text: "Este cuarto marca el momento donde ya no era solo ilusion, sino decision de caminar juntos. Ese dia frio y lluvioso te pedi ser mi novia y mi corazon se sintio en paz al escucharte. Es una promesa que guardo con felicidad, porque ahi comenzo oficialmente nuestra historia.",
+      photo: fifthDatePhoto
     },
     {
       date: "5 de abril de 2025",
@@ -233,8 +244,8 @@ const data: ContentData = {
       caption: "Dia 1: La noche en que te conoci"
     },
     {
-      src: photosCita[3],
-      caption: "Ese día"
+      src: secondDatePhoto,
+      caption: "Dia 2: Nuestra primera salida"
     },
     {
       src: photosDeclaracion[0],

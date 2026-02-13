@@ -1,12 +1,17 @@
 import type { CSSProperties } from "react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import type { TimelineItem } from "../../data/content";
+import type { MotionIntensity } from "../../domain/animation/motionIntensity";
 import IconGlyph from "../ui/IconGlyph";
 import { timelineMiniGameAssets } from "../../assets/timeline-map";
 
 type TimelineSectionProps = {
   timeline: TimelineItem[];
+  audioLevels?: number[];
+  beat?: number;
+  musicOn?: boolean;
+  motionIntensity?: MotionIntensity;
 };
 
 type TimelineStage = "foyer" | "zooming" | "journey";
@@ -84,6 +89,62 @@ const doorDustSpecs = Array.from({ length: 18 }, (_, index) => ({
   drift: (index % 2 === 0 ? 1 : -1) * (14 + (index % 5) * 4),
   rise: 64 + (index % 4) * 20,
   alpha: 0.24 + (index % 4) * 0.11
+}));
+const dayOneLeafSpecs = Array.from({ length: 14 }, (_, index) => ({
+  id: `leaf-${index}`,
+  x: 4 + ((index * 9) % 92),
+  y: -8 + ((index * 13) % 30),
+  size: 16 + (index % 5) * 4,
+  delay: index * 0.28,
+  duration: 6.1 + (index % 5) * 0.85,
+  drift: (index % 2 === 0 ? 1 : -1) * (22 + (index % 4) * 8),
+  fall: 150 + (index % 5) * 24,
+  rotate: -28 + (index % 9) * 10
+}));
+const dayTwoStarRainSpecs = Array.from({ length: 14 }, (_, index) => ({
+  id: `day-two-star-${index}`,
+  x: 6 + ((index * 13) % 88),
+  y: -30 + ((index * 9) % 24),
+  size: 3.2 + (index % 4) * 1.2,
+  delay: index * 0.27,
+  duration: 3.3 + (index % 4) * 0.64,
+  drift: (index % 2 === 0 ? -1 : 1) * (56 + (index % 4) * 18),
+  fall: 320 + (index % 4) * 70,
+  opacity: 0.52 + (index % 4) * 0.11
+}));
+const dayThreeProjectorDustSpecs = Array.from({ length: 16 }, (_, index) => ({
+  id: `day-three-dust-${index}`,
+  x: 12 + ((index * 17) % 76),
+  y: 14 + ((index * 11) % 68),
+  size: 1.5 + (index % 4) * 0.95,
+  delay: index * 0.19,
+  duration: 2.3 + (index % 4) * 0.48,
+  drift: (index % 2 === 0 ? -1 : 1) * (8 + (index % 3) * 6),
+  rise: 12 + (index % 4) * 8,
+  alpha: 0.24 + (index % 4) * 0.13
+}));
+const dayFourSparkSpecs = Array.from({ length: 13 }, (_, index) => ({
+  id: `day-four-spark-${index}`,
+  x: 8 + ((index * 11) % 84),
+  y: -16 + ((index * 7) % 20),
+  size: 2 + (index % 3) * 1.2,
+  delay: index * 0.24,
+  duration: 3.2 + (index % 4) * 0.52,
+  drift: (index % 2 === 0 ? -1 : 1) * (32 + (index % 4) * 9),
+  fall: 220 + (index % 3) * 54,
+  alpha: 0.4 + (index % 4) * 0.12
+}));
+const dayFivePetalSpecs = Array.from({ length: 12 }, (_, index) => ({
+  id: `day-five-petal-${index}`,
+  x: 10 + ((index * 12) % 80),
+  y: -10 + ((index * 9) % 18),
+  size: 12 + (index % 4) * 4,
+  delay: index * 0.31,
+  duration: 5.3 + (index % 4) * 0.76,
+  drift: (index % 2 === 0 ? 1 : -1) * (22 + (index % 4) * 8),
+  fall: 190 + (index % 4) * 34,
+  rotate: -18 + (index % 7) * 9,
+  alpha: 0.34 + (index % 4) * 0.12
 }));
 const manorStarSpecs = Array.from({ length: 14 }, (_, index) => ({
   id: `star-${index}`,
@@ -353,13 +414,27 @@ function normalizeTimeline(timeline: TimelineItem[]): TimelineItem[] {
       text:
         item?.text?.trim() ??
         "Escribe aqui lo que paso en este dia para completar su historia juntos.",
-      photo: item?.photo
+      photo: item?.photo,
+      photos: (item?.photos ?? []).filter((photo): photo is string => Boolean(photo?.trim()))
     };
   });
 }
 
-export default function TimelineSection({ timeline }: TimelineSectionProps) {
+export default function TimelineSection({
+  timeline,
+  audioLevels,
+  beat,
+  musicOn = false,
+  motionIntensity = "normal"
+}: TimelineSectionProps) {
   const prefersReducedMotion = useReducedMotion();
+  const isWindowsElectronRuntime = useMemo(() => {
+    if (typeof navigator === "undefined") return false;
+    const userAgent = navigator.userAgent.toLowerCase();
+    return userAgent.includes("electron") && userAgent.includes("windows");
+  }, []);
+  const useRuntimeSafeMode = isWindowsElectronRuntime && motionIntensity === "soft";
+  const reduceMotion = Boolean(prefersReducedMotion || useRuntimeSafeMode);
   const timelineSteps = useMemo(() => normalizeTimeline(timeline), [timeline]);
   const stageRef = useRef<TimelineStage>("foyer");
   const transitionTimerRef = useRef<number | null>(null);
@@ -373,6 +448,9 @@ export default function TimelineSection({ timeline }: TimelineSectionProps) {
   const [walkFrame, setWalkFrame] = useState<0 | 1>(0);
   const [princePosition, setPrincePosition] = useState<InteriorRoutePoint>(princeSpawnPoint);
   const [isFloorModalOpen, setIsFloorModalOpen] = useState(false);
+  const [dayFourPulseTime, setDayFourPulseTime] = useState(0);
+  const dayFiveFxAudioContextRef = useRef<AudioContext | null>(null);
+  const dayFiveOpenStateRef = useRef(false);
 
   const totalSteps = timelineSteps.length;
   const interiorRooms = useMemo(() => {
@@ -385,6 +463,100 @@ export default function TimelineSection({ timeline }: TimelineSectionProps) {
     return Array.from({ length: totalSteps }, (_, index) => interiorRoomNodesTemplate[index] ?? fallback);
   }, [totalSteps]);
   const activeItem = activeStep >= 0 ? timelineSteps[activeStep] : null;
+  const isNatureDay = activeStep === 0;
+  const isDateTwoDay = activeStep === 1;
+  const isDateThreeDay = activeStep === 2;
+  const isDateFourDay = activeStep === 3;
+  const isDateFiveDay = activeStep === 4;
+  const safeBeat = Math.min(1, Math.max(0, beat ?? 0));
+  const dayFourEqBars = useMemo(() => {
+    const bucketSource = audioLevels?.length ? audioLevels : [];
+    if (!bucketSource.length) {
+      return Array.from({ length: 14 }, () => 0);
+    }
+
+    return Array.from({ length: 14 }, (_, index) => {
+      const normalizedIndex = (index / 13) * Math.max(bucketSource.length - 1, 0);
+      const lowerIndex = Math.floor(normalizedIndex);
+      const upperIndex = Math.min(bucketSource.length - 1, lowerIndex + 1);
+      const ratio = normalizedIndex - lowerIndex;
+      const lower = bucketSource[lowerIndex] ?? 0;
+      const upper = bucketSource[upperIndex] ?? lower;
+      const interpolated = lower + (upper - lower) * ratio;
+      const barEmphasis = index % 2 === 0 ? 1.04 : 0.96;
+      const edgeFalloff = index === 0 || index === 13 ? 0.84 : 1;
+      const level = Math.min(
+        1,
+        Math.max(0, (interpolated * 0.84 + safeBeat * 0.56) * barEmphasis * edgeFalloff)
+      );
+      return Number(level.toFixed(3));
+    });
+  }, [audioLevels, safeBeat]);
+  const dayFourLiveBars = useMemo(() => {
+    const time = dayFourPulseTime / 1000;
+    return dayFourEqBars.map((liveLevel, index) => {
+      if (liveLevel > 0.024 || safeBeat > 0.024) {
+        return liveLevel;
+      }
+
+      const waveA = (Math.sin(time * 3.4 + index * 0.7) + 1) / 2;
+      const waveB = (Math.sin(time * 5 + index * 0.32 + 1.1) + 1) / 2;
+      const fallback = 0.17 + waveA * 0.19 + waveB * 0.12;
+      return Number(Math.min(0.56, Math.max(0.12, fallback)).toFixed(3));
+    });
+  }, [dayFourEqBars, dayFourPulseTime, safeBeat]);
+  const isDayFourAudioReactive = useMemo(
+    () => musicOn && (dayFourEqBars.some((level) => level > 0.01) || safeBeat > 0.01),
+    [dayFourEqBars, musicOn, safeBeat]
+  );
+  const activePhotos = useMemo(() => {
+    if (!activeItem) {
+      return [];
+    }
+
+    const merged = [activeItem.photo, ...(activeItem.photos ?? [])].filter(
+      (photo): photo is string => Boolean(photo?.trim())
+    );
+
+    return merged.filter((photo, index) => merged.indexOf(photo) === index);
+  }, [activeItem]);
+  const storyCardInitial = reduceMotion
+    ? false
+    : isDateThreeDay
+      ? { opacity: 0, y: 18, scale: 0.965, filter: "blur(5px) saturate(0.7)" }
+      : isDateFourDay
+        ? { opacity: 0, y: 14, scale: 0.97, filter: "blur(4px) saturate(0.82)" }
+      : isDateFiveDay
+        ? { opacity: 0, y: 16, scale: 0.972, filter: "blur(3px) saturate(0.85)" }
+      : { opacity: 0, y: 10 };
+  const storyCardAnimate = isDateThreeDay
+    ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px) saturate(1)" }
+    : isDateFourDay
+      ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px) saturate(1)" }
+    : isDateFiveDay
+      ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px) saturate(1)" }
+    : { opacity: 1, y: 0 };
+  const storyCardExit = reduceMotion
+    ? { opacity: 0 }
+    : isDateThreeDay
+      ? { opacity: 0, y: -10, scale: 0.98, filter: "blur(2px) saturate(0.84)" }
+      : isDateFourDay
+        ? { opacity: 0, y: -8, scale: 0.985, filter: "blur(2px) saturate(0.86)" }
+      : isDateFiveDay
+        ? { opacity: 0, y: -8, scale: 0.988, filter: "blur(2px) saturate(0.88)" }
+      : { opacity: 0, y: -8 };
+  const storyCardTransition = {
+    duration: reduceMotion
+      ? 0.01
+      : isDateThreeDay
+        ? 0.36
+      : isDateFourDay
+        ? 0.3
+      : isDateFiveDay
+        ? 0.28
+      : 0.22,
+    ease: isDateThreeDay || isDateFourDay || isDateFiveDay ? "easeInOut" : "easeOut"
+  } as const;
   const progress = (Math.max(activeStep + 1, 0) / totalSteps) * 100;
   const magicLevel = totalSteps > 1 ? Math.max(activeStep, 0) / (totalSteps - 1) : 0;
   const journeyComplete = journeyStarted && activeStep >= totalSteps - 1;
@@ -397,6 +569,74 @@ export default function TimelineSection({ timeline }: TimelineSectionProps) {
     ["--timeline-magic-level" as string]: `${magicLevel.toFixed(3)}`
   } as CSSProperties;
 
+  const playDayFiveOpenFx = useCallback(() => {
+    if (typeof window === "undefined") return;
+
+    const audioContextConstructor =
+      window.AudioContext ||
+      (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    if (!audioContextConstructor) return;
+
+    let context = dayFiveFxAudioContextRef.current;
+    if (!context) {
+      context = new audioContextConstructor();
+      dayFiveFxAudioContextRef.current = context;
+    }
+
+    const scheduleFx = () => {
+      const now = context!.currentTime + 0.03;
+      const masterGain = context!.createGain();
+      masterGain.gain.setValueAtTime(0.0001, now);
+      masterGain.gain.exponentialRampToValueAtTime(0.072, now + 0.04);
+      masterGain.gain.exponentialRampToValueAtTime(0.0001, now + 1.24);
+      masterGain.connect(context!.destination);
+
+      const chimeOscillator = context!.createOscillator();
+      chimeOscillator.type = "triangle";
+      chimeOscillator.frequency.setValueAtTime(996, now);
+      chimeOscillator.frequency.exponentialRampToValueAtTime(742, now + 0.7);
+      const chimeGain = context!.createGain();
+      chimeGain.gain.setValueAtTime(0.0001, now);
+      chimeGain.gain.exponentialRampToValueAtTime(0.26, now + 0.02);
+      chimeGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.92);
+      chimeOscillator.connect(chimeGain);
+      chimeGain.connect(masterGain);
+      chimeOscillator.start(now);
+      chimeOscillator.stop(now + 0.95);
+
+      const heartbeatMoments = [now + 0.35, now + 0.63];
+      heartbeatMoments.forEach((beatTime, pulseIndex) => {
+        const thumpOscillator = context!.createOscillator();
+        thumpOscillator.type = "sine";
+        thumpOscillator.frequency.setValueAtTime(94 - pulseIndex * 8, beatTime);
+        thumpOscillator.frequency.exponentialRampToValueAtTime(48, beatTime + 0.14);
+
+        const thumpFilter = context!.createBiquadFilter();
+        thumpFilter.type = "lowpass";
+        thumpFilter.frequency.setValueAtTime(230, beatTime);
+        thumpFilter.Q.setValueAtTime(0.9, beatTime);
+
+        const thumpGain = context!.createGain();
+        thumpGain.gain.setValueAtTime(0.0001, beatTime);
+        thumpGain.gain.exponentialRampToValueAtTime(0.33 - pulseIndex * 0.08, beatTime + 0.02);
+        thumpGain.gain.exponentialRampToValueAtTime(0.0001, beatTime + 0.22);
+
+        thumpOscillator.connect(thumpFilter);
+        thumpFilter.connect(thumpGain);
+        thumpGain.connect(masterGain);
+        thumpOscillator.start(beatTime);
+        thumpOscillator.stop(beatTime + 0.25);
+      });
+    };
+
+    if (context.state === "suspended") {
+      void context.resume().then(scheduleFx).catch(() => {});
+      return;
+    }
+
+    scheduleFx();
+  }, []);
+
   const clearJourneyTimers = () => {
     moveTimersRef.current.forEach((timer) => window.clearTimeout(timer));
     moveTimersRef.current = [];
@@ -407,7 +647,35 @@ export default function TimelineSection({ timeline }: TimelineSectionProps) {
   }, [stage]);
 
   useEffect(() => {
+    if (!isDateFourDay || !isFloorModalOpen) {
+      return;
+    }
+
+    let rafId = 0;
+    const loop = (timestamp: number) => {
+      setDayFourPulseTime(timestamp);
+      rafId = window.requestAnimationFrame(loop);
+    };
+
+    rafId = window.requestAnimationFrame(loop);
+    return () => window.cancelAnimationFrame(rafId);
+  }, [isDateFourDay, isFloorModalOpen]);
+
+  useEffect(() => {
+    const shouldTrigger = isFloorModalOpen && isDateFiveDay;
+    if (shouldTrigger && !dayFiveOpenStateRef.current) {
+      playDayFiveOpenFx();
+    }
+    dayFiveOpenStateRef.current = shouldTrigger;
+  }, [isDateFiveDay, isFloorModalOpen, playDayFiveOpenFx]);
+
+  useEffect(() => {
     return () => {
+      const context = dayFiveFxAudioContextRef.current;
+      if (context) {
+        void context.close();
+      }
+      dayFiveFxAudioContextRef.current = null;
       if (transitionTimerRef.current !== null) {
         window.clearTimeout(transitionTimerRef.current);
         transitionTimerRef.current = null;
@@ -482,7 +750,7 @@ export default function TimelineSection({ timeline }: TimelineSectionProps) {
 
     setDoorOpen(true);
 
-    if (prefersReducedMotion) {
+    if (reduceMotion) {
       setStage("journey");
       setActiveStep(-1);
       setJourneyStarted(false);
@@ -526,7 +794,7 @@ export default function TimelineSection({ timeline }: TimelineSectionProps) {
     setIsFloorModalOpen(false);
     setIsMoving(true);
 
-    if (prefersReducedMotion) {
+    if (reduceMotion) {
       setPrincePosition({ x: targetRoom.x, y: targetRoom.y });
       finishTravel(clampedStep, openModal);
       return;
@@ -560,7 +828,7 @@ export default function TimelineSection({ timeline }: TimelineSectionProps) {
 
   return (
     <section
-      className="timeline-section-reset timeline-bridgerton-section section detail-section"
+      className={`timeline-section-reset timeline-bridgerton-section section detail-section ${useRuntimeSafeMode ? "is-runtime-safe" : ""}`.trim()}
       data-mood="gala"
       id="timeline"
       style={timelineMagicStyle}
@@ -589,7 +857,7 @@ export default function TimelineSection({ timeline }: TimelineSectionProps) {
               initial={false}
               animate={
                 stage === "zooming"
-                  ? prefersReducedMotion
+                  ? reduceMotion
                     ? { opacity: 0 }
                     : {
                         scale: [1, 1.46, 2.9],
@@ -600,7 +868,7 @@ export default function TimelineSection({ timeline }: TimelineSectionProps) {
                   : { scale: 1, y: 0, opacity: 1, filter: "blur(0px)" }
               }
               transition={{
-                duration: prefersReducedMotion ? 0.01 : 1.65,
+                duration: reduceMotion ? 0.01 : 1.65,
                 ease: [0.16, 0.84, 0.29, 0.99],
                 times: stage === "zooming" ? [0, 0.62, 1] : undefined
               }}
@@ -677,7 +945,7 @@ export default function TimelineSection({ timeline }: TimelineSectionProps) {
                 </div>
               </div>
 
-              {stage === "zooming" && !prefersReducedMotion && (
+              {stage === "zooming" && !reduceMotion && (
                 <motion.span
                   className="timeline-door-zoom-overlay"
                   initial={{ opacity: 0.5, scale: 0.44 }}
@@ -693,10 +961,10 @@ export default function TimelineSection({ timeline }: TimelineSectionProps) {
             <motion.div
               key="journey"
               className="timeline-journey-scene"
-              initial={prefersReducedMotion ? false : { opacity: 0, y: 28, scale: 0.98 }}
+              initial={reduceMotion ? false : { opacity: 0, y: 28, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -16 }}
-              transition={{ duration: prefersReducedMotion ? 0.01 : 0.45, ease: [0.22, 1, 0.36, 1] }}
+              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -16 }}
+              transition={{ duration: reduceMotion ? 0.01 : 0.45, ease: [0.22, 1, 0.36, 1] }}
             >
               <header className="timeline-journey-topbar">
                 <div className="timeline-journey-progress">
@@ -712,7 +980,7 @@ export default function TimelineSection({ timeline }: TimelineSectionProps) {
                       className="timeline-progress-fill"
                       initial={false}
                       animate={{ width: `${progress}%` }}
-                      transition={{ duration: prefersReducedMotion ? 0.01 : 0.35, ease: "easeOut" }}
+                      transition={{ duration: reduceMotion ? 0.01 : 0.35, ease: "easeOut" }}
                     />
                   </div>
                 </div>
@@ -776,6 +1044,7 @@ export default function TimelineSection({ timeline }: TimelineSectionProps) {
                         const roomNode = interiorRooms[index];
                         const reached = journeyStarted && index <= activeStep;
                         const isActive = journeyStarted && index === activeStep;
+                        const isProposalRoom = index === 4;
                         const unlocked = journeyStarted && index <= maxUnlockedStep;
                         const doorVariant: MiniDoorVariant = isActive
                           ? "active"
@@ -800,7 +1069,7 @@ export default function TimelineSection({ timeline }: TimelineSectionProps) {
                             }
                           >
                             <span
-                              className={`timeline-mini-room-door ${isActive && !isMoving ? "is-glowing" : ""}`}
+                              className={`timeline-mini-room-door ${isActive && !isMoving ? "is-glowing" : ""} ${isProposalRoom ? "is-proposal-door" : ""}`}
                               aria-hidden="true"
                             >
                               <MiniMapDoorGlyph variant={doorVariant} />
@@ -821,7 +1090,7 @@ export default function TimelineSection({ timeline }: TimelineSectionProps) {
                           top: `${princePosition.y}%`
                         }}
                         transition={{
-                          duration: prefersReducedMotion ? 0.01 : 0.62,
+                          duration: reduceMotion ? 0.01 : 0.62,
                           ease: [0.18, 0.86, 0.24, 1]
                         }}
                         aria-hidden="true"
@@ -871,9 +1140,9 @@ export default function TimelineSection({ timeline }: TimelineSectionProps) {
               {journeyComplete && (
                 <motion.div
                   className="timeline-ending-note"
-                  initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
+                  initial={reduceMotion ? false : { opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: prefersReducedMotion ? 0.01 : 0.3, ease: "easeOut" }}
+                  transition={{ duration: reduceMotion ? 0.01 : 0.3, ease: "easeOut" }}
                 >
                   <IconGlyph name="crown" />
                   <p>
@@ -886,42 +1155,78 @@ export default function TimelineSection({ timeline }: TimelineSectionProps) {
               <AnimatePresence>
                 {isFloorModalOpen && activeItem && (
                   <motion.div
-                    className="timeline-floor-modal-backdrop"
-                    initial={prefersReducedMotion ? false : { opacity: 0 }}
+                    className={[
+                      "timeline-floor-modal-backdrop",
+                      isDateThreeDay ? "is-date-three-backdrop" : "",
+                      isDateFourDay ? "is-date-four-backdrop" : "",
+                      isDateFiveDay ? "is-date-five-backdrop" : ""
+                    ]
+                      .filter(Boolean)
+                      .join(" ")}
+                    initial={reduceMotion ? false : { opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: prefersReducedMotion ? 0.01 : 0.22, ease: "easeOut" }}
+                    transition={{ duration: reduceMotion ? 0.01 : 0.22, ease: "easeOut" }}
                     onClick={() => setIsFloorModalOpen(false)}
                   >
                     <motion.div
-                      className="timeline-floor-modal"
+                      className={[
+                        "timeline-floor-modal",
+                        isNatureDay ? "is-nature-day-modal" : "",
+                        isDateTwoDay ? "is-date-two-modal" : "",
+                        isDateThreeDay ? "is-date-three-modal" : "",
+                        isDateFourDay ? "is-date-four-modal" : "",
+                        isDateFiveDay ? "is-date-five-modal" : ""
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
                       role="dialog"
                       aria-modal="true"
                       aria-labelledby={`timeline-floor-title-${activeStep}`}
                       initial={
-                        prefersReducedMotion
+                        reduceMotion
                           ? false
                           : { opacity: 0, y: 20, scale: 0.97, filter: "blur(2px)" }
                       }
                       animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
                       exit={
-                        prefersReducedMotion
+                        reduceMotion
                           ? { opacity: 0 }
                           : { opacity: 0, y: 12, scale: 0.97, filter: "blur(2px)" }
                       }
                       transition={{
-                        duration: prefersReducedMotion ? 0.01 : 0.24,
+                        duration: reduceMotion ? 0.01 : 0.24,
                         ease: [0.22, 1, 0.36, 1]
                       }}
                       onClick={(event) => event.stopPropagation()}
                     >
                       <div className="timeline-floor-modal-header">
-                        <span className={`timeline-story-day ${activeStep === 0 ? "is-nature-day" : ""}`}>
+                        <span
+                          className={[
+                            "timeline-story-day",
+                            isNatureDay ? "is-nature-day" : "",
+                            isDateTwoDay ? "is-date-two-day" : "",
+                            isDateThreeDay ? "is-date-three-day" : "",
+                            isDateFourDay ? "is-date-four-day" : "",
+                            isDateFiveDay ? "is-date-five-day" : ""
+                          ]
+                            .filter(Boolean)
+                            .join(" ")}
+                        >
                           Carta · Dia {activeStep + 1}
                         </span>
                         <button
                           type="button"
-                          className="timeline-floor-modal-close"
+                          className={[
+                            "timeline-floor-modal-close",
+                            isNatureDay ? "is-nature-day" : "",
+                            isDateTwoDay ? "is-date-two-day" : "",
+                            isDateThreeDay ? "is-date-three-day" : "",
+                            isDateFourDay ? "is-date-four-day" : "",
+                            isDateFiveDay ? "is-date-five-day" : ""
+                          ]
+                            .filter(Boolean)
+                            .join(" ")}
                           onClick={() => setIsFloorModalOpen(false)}
                         >
                           Cerrar
@@ -931,18 +1236,210 @@ export default function TimelineSection({ timeline }: TimelineSectionProps) {
                       <AnimatePresence mode="wait">
                         <motion.article
                           key={`story-modal-${activeStep}`}
-                          className={`timeline-story-card ${activeStep === 0 ? "is-nature-card" : ""}`}
-                          initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
-                          transition={{ duration: prefersReducedMotion ? 0.01 : 0.22, ease: "easeOut" }}
+                          className={[
+                            "timeline-story-card",
+                            isNatureDay ? "is-nature-card" : "",
+                            isDateTwoDay ? "is-date-two-card" : "",
+                            isDateThreeDay ? "is-date-three-card" : "",
+                            isDateFourDay ? "is-date-four-card" : "",
+                            isDateFiveDay ? "is-date-five-card" : ""
+                          ]
+                            .filter(Boolean)
+                            .join(" ")}
+                          initial={storyCardInitial}
+                          animate={storyCardAnimate}
+                          exit={storyCardExit}
+                          transition={storyCardTransition}
                         >
                           <h3 id={`timeline-floor-title-${activeStep}`}>{activeItem?.title}</h3>
                           <p className="timeline-story-date">{activeItem?.date}</p>
-                          {activeItem?.photo ? (
+                          {isNatureDay ? (
+                            <span className="timeline-nature-leaves" aria-hidden="true">
+                              {dayOneLeafSpecs.map((leaf) => (
+                                <i
+                                  key={leaf.id}
+                                  style={
+                                    {
+                                      ["--leaf-x" as string]: `${leaf.x}%`,
+                                      ["--leaf-y" as string]: `${leaf.y}%`,
+                                      ["--leaf-size" as string]: `${leaf.size}px`,
+                                      ["--leaf-delay" as string]: `${leaf.delay}s`,
+                                      ["--leaf-duration" as string]: `${leaf.duration}s`,
+                                      ["--leaf-drift" as string]: `${leaf.drift}px`,
+                                      ["--leaf-fall" as string]: `${leaf.fall}px`,
+                                      ["--leaf-rotate" as string]: `${leaf.rotate}deg`
+                                    } as CSSProperties
+                                  }
+                                />
+                              ))}
+                            </span>
+                          ) : null}
+                          {isDateTwoDay ? (
+                            <span className="timeline-date-two-sky" aria-hidden="true">
+                              <span className="timeline-date-two-moon" />
+                              <span className="timeline-date-two-star-rain">
+                                {dayTwoStarRainSpecs.map((star) => (
+                                  <i
+                                    key={star.id}
+                                    style={
+                                      {
+                                        ["--shoot-x" as string]: `${star.x}%`,
+                                        ["--shoot-y" as string]: `${star.y}%`,
+                                        ["--shoot-size" as string]: `${star.size}px`,
+                                        ["--shoot-delay" as string]: `${star.delay}s`,
+                                        ["--shoot-duration" as string]: `${star.duration}s`,
+                                        ["--shoot-drift" as string]: `${star.drift}px`,
+                                        ["--shoot-fall" as string]: `${star.fall}px`,
+                                        ["--shoot-opacity" as string]: `${star.opacity}`
+                                      } as CSSProperties
+                                    }
+                                  />
+                                ))}
+                              </span>
+                            </span>
+                          ) : null}
+                          {isDateThreeDay ? (
+                            <span className="timeline-date-three-cinema" aria-hidden="true">
+                              <span className="timeline-date-three-marquee">
+                                <span className="timeline-date-three-marquee-lights" />
+                              </span>
+                              <span className="timeline-date-three-curtain curtain-left" />
+                              <span className="timeline-date-three-curtain curtain-right" />
+                              <span className="timeline-date-three-projector">
+                                <i />
+                                <i />
+                              </span>
+                              <span className="timeline-date-three-beam">
+                                <span className="timeline-date-three-beam-dust">
+                                  {dayThreeProjectorDustSpecs.map((dust) => (
+                                    <i
+                                      key={dust.id}
+                                      style={
+                                        {
+                                          ["--cinema-dust-x" as string]: `${dust.x}%`,
+                                          ["--cinema-dust-y" as string]: `${dust.y}%`,
+                                          ["--cinema-dust-size" as string]: `${dust.size}px`,
+                                          ["--cinema-dust-delay" as string]: `${dust.delay}s`,
+                                          ["--cinema-dust-duration" as string]: `${dust.duration}s`,
+                                          ["--cinema-dust-drift" as string]: `${dust.drift}px`,
+                                          ["--cinema-dust-rise" as string]: `${dust.rise}px`,
+                                          ["--cinema-dust-alpha" as string]: `${dust.alpha}`
+                                        } as CSSProperties
+                                      }
+                                    />
+                                  ))}
+                                </span>
+                              </span>
+                              <span className="timeline-date-three-carpet" />
+                            </span>
+                          ) : null}
+                          {isDateFourDay ? (
+                            <span
+                              className={[
+                                "timeline-date-four-concert",
+                                isDayFourAudioReactive ? "is-audio-reactive" : ""
+                              ]
+                                .filter(Boolean)
+                                .join(" ")}
+                              style={
+                                {
+                                  ["--timeline-day4-beat" as string]: safeBeat.toFixed(3)
+                                } as CSSProperties
+                              }
+                              aria-hidden="true"
+                            >
+                              <span className="timeline-date-four-stage-lights" />
+                              <span className="timeline-date-four-eq">
+                                {Array.from({ length: 14 }, (_, index) => (
+                                  <i
+                                    key={`day-four-eq-${index}`}
+                                    style={
+                                      {
+                                        ["--bar-delay" as string]: `${index * 0.08}s`,
+                                        ["--bar-live-level" as string]:
+                                          `${dayFourLiveBars[index] ?? 0}`
+                                      } as CSSProperties
+                                    }
+                                  />
+                                ))}
+                              </span>
+                              <span className="timeline-date-four-spark-rain">
+                                {dayFourSparkSpecs.map((spark) => (
+                                  <i
+                                    key={spark.id}
+                                    style={
+                                      {
+                                        ["--spark-x" as string]: `${spark.x}%`,
+                                        ["--spark-y" as string]: `${spark.y}%`,
+                                        ["--spark-size" as string]: `${spark.size}px`,
+                                        ["--spark-delay" as string]: `${spark.delay}s`,
+                                        ["--spark-duration" as string]: `${spark.duration}s`,
+                                        ["--spark-drift" as string]: `${spark.drift}px`,
+                                        ["--spark-fall" as string]: `${spark.fall}px`,
+                                        ["--spark-alpha" as string]: `${spark.alpha}`
+                                      } as CSSProperties
+                                    }
+                                  />
+                                ))}
+                              </span>
+                              <span className="timeline-date-four-floor-glow" />
+                            </span>
+                          ) : null}
+                          {isDateFiveDay ? (
+                            <span className="timeline-date-five-proposal" aria-hidden="true">
+                              <span className="timeline-date-five-veil" />
+                              <span className="timeline-date-five-golden-door">
+                                <span className="timeline-date-five-door-shimmer" />
+                                <span className="timeline-date-five-door-knob" />
+                              </span>
+                              <span className="timeline-date-five-ring">
+                                <span className="timeline-date-five-ring-core" />
+                              </span>
+                              <span className="timeline-date-five-seal" />
+                            </span>
+                          ) : null}
+                          {isDateFiveDay ? (
+                            <span className="timeline-date-five-petals-front" aria-hidden="true">
+                              {dayFivePetalSpecs.map((petal) => (
+                                <i
+                                  key={petal.id}
+                                  style={
+                                    {
+                                      ["--petal-x" as string]: `${petal.x}%`,
+                                      ["--petal-y" as string]: `${petal.y}%`,
+                                      ["--petal-size" as string]: `${petal.size}px`,
+                                      ["--petal-delay" as string]: `${petal.delay}s`,
+                                      ["--petal-duration" as string]: `${petal.duration}s`,
+                                      ["--petal-drift" as string]: `${petal.drift}px`,
+                                      ["--petal-fall" as string]: `${petal.fall}px`,
+                                      ["--petal-rotate" as string]: `${petal.rotate}deg`,
+                                      ["--petal-alpha" as string]: `${petal.alpha}`
+                                    } as CSSProperties
+                                  }
+                                />
+                              ))}
+                            </span>
+                          ) : null}
+                          {isDateFourDay && activePhotos.length > 1 ? (
+                            <div className="timeline-story-photo-grid timeline-story-photo-grid-date-four">
+                              {activePhotos.slice(0, 2).map((photo, index) => (
+                                <figure
+                                  key={`timeline-day-${activeStep + 1}-photo-${index + 1}`}
+                                  className={`timeline-story-photo timeline-story-photo-duo slot-${index + 1}`}
+                                >
+                                  <img
+                                    src={photo}
+                                    alt={`Recuerdo del dia ${activeStep + 1} - foto ${index + 1}`}
+                                    loading="lazy"
+                                    decoding="async"
+                                  />
+                                </figure>
+                              ))}
+                            </div>
+                          ) : activePhotos.length > 0 ? (
                             <figure className="timeline-story-photo">
                               <img
-                                src={activeItem.photo}
+                                src={activePhotos[0]}
                                 alt={`Recuerdo del dia ${activeStep + 1}`}
                                 loading="lazy"
                                 decoding="async"
@@ -967,7 +1464,18 @@ export default function TimelineSection({ timeline }: TimelineSectionProps) {
                         </motion.article>
                       </AnimatePresence>
 
-                      <div className="timeline-floor-modal-nav">
+                      <div
+                        className={[
+                          "timeline-floor-modal-nav",
+                          isNatureDay ? "is-nature-day" : "",
+                          isDateTwoDay ? "is-date-two-day" : "",
+                          isDateThreeDay ? "is-date-three-day" : "",
+                          isDateFourDay ? "is-date-four-day" : "",
+                          isDateFiveDay ? "is-date-five-day" : ""
+                        ]
+                          .filter(Boolean)
+                          .join(" ")}
+                      >
                         <button
                           type="button"
                           className="button ghost"

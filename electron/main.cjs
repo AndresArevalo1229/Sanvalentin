@@ -1,5 +1,25 @@
 const { app, BrowserWindow } = require("electron");
+const fs = require("fs");
 const path = require("path");
+
+const runtimeLogFileName = "runtime-diagnostics.log";
+const safeRenderMode =
+  process.argv.includes("--safe-render") || process.env.SVA_SAFE_RENDER === "1";
+
+const appendRuntimeLog = (message) => {
+  try {
+    const logPath = path.join(app.getPath("userData"), runtimeLogFileName);
+    const timestamp = new Date().toISOString();
+    fs.appendFileSync(logPath, `[${timestamp}] ${message}\n`, "utf8");
+  } catch {
+    // Ignore logging errors: diagnostics should never crash the app.
+  }
+};
+
+if (process.platform === "win32" && safeRenderMode) {
+  // Optional fallback mode for problematic Windows GPU drivers.
+  app.disableHardwareAcceleration();
+}
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -13,6 +33,22 @@ const createWindow = () => {
     }
   });
 
+  win.webContents.on("render-process-gone", (_, details) => {
+    appendRuntimeLog(
+      `render-process-gone reason=${details.reason} exitCode=${details.exitCode}`
+    );
+  });
+
+  win.webContents.on("did-fail-load", (_, errorCode, errorDescription, validatedURL, isMainFrame) => {
+    appendRuntimeLog(
+      `did-fail-load code=${errorCode} desc=${errorDescription} url=${validatedURL} mainFrame=${isMainFrame}`
+    );
+  });
+
+  win.on("unresponsive", () => {
+    appendRuntimeLog("window-unresponsive");
+  });
+
   const devServerUrl = process.env.VITE_DEV_SERVER_URL;
   if (devServerUrl) {
     win.loadURL(devServerUrl);
@@ -22,6 +58,11 @@ const createWindow = () => {
 };
 
 app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  appendRuntimeLog(
+    `render-mode=${safeRenderMode ? "software-safe" : "hardware"} platform=${process.platform}`
+  );
+});
 
 app.on("activate", () => {
   if (BrowserWindow.getAllWindows().length === 0) {
