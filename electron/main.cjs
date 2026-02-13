@@ -3,8 +3,10 @@ const fs = require("fs");
 const path = require("path");
 
 const runtimeLogFileName = "runtime-diagnostics.log";
-const safeRenderMode =
+const isWindows = process.platform === "win32";
+const safeRenderRequested =
   process.argv.includes("--safe-render") || process.env.SVA_SAFE_RENDER === "1";
+const useSoftwareRendering = isWindows && safeRenderRequested;
 
 const appendRuntimeLog = (message) => {
   try {
@@ -16,8 +18,8 @@ const appendRuntimeLog = (message) => {
   }
 };
 
-if (process.platform === "win32" && safeRenderMode) {
-  // Optional fallback mode for problematic Windows GPU drivers.
+if (useSoftwareRendering) {
+  // Optional software rendering fallback for problematic Windows setups.
   app.disableHardwareAcceleration();
 }
 
@@ -57,11 +59,13 @@ const createWindow = () => {
   }
 };
 
-app.whenReady().then(createWindow);
 app.whenReady().then(() => {
   appendRuntimeLog(
-    `render-mode=${safeRenderMode ? "software-safe" : "hardware"} platform=${process.platform}`
+    `startup platform=${process.platform} renderMode=${
+      useSoftwareRendering ? "software-safe" : "hardware-default"
+    } safeRenderRequested=${safeRenderRequested}`
   );
+  createWindow();
 });
 
 app.on("activate", () => {
