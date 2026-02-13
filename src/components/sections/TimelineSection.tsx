@@ -154,16 +154,49 @@ const daySixRippleSpecs = [
   { id: "day-six-ripple-4", x: 78, y: 66, size: 164, delay: 2.4, duration: 8.6, alpha: 0.26 },
   { id: "day-six-ripple-5", x: 52, y: 48, size: 226, delay: 1.8, duration: 9.6, alpha: 0.18 }
 ];
-const daySixBubbleSpecs = Array.from({ length: 10 }, (_, index) => ({
+const daySixBubbleSpecs = Array.from({ length: 18 }, (_, index) => ({
   id: `day-six-bubble-${index}`,
-  x: 10 + ((index * 17) % 78),
-  y: 110 + ((index * 7) % 22),
-  size: 14 + (index % 4) * 6,
-  delay: index * 0.58,
-  duration: 5.4 + (index % 4) * 0.9,
-  drift: (index % 2 === 0 ? 1 : -1) * (16 + (index % 3) * 7),
-  rise: 210 + (index % 4) * 52,
-  alpha: 0.3 + (index % 4) * 0.12
+  x: 7 + ((index * 9) % 86),
+  y: 104 + ((index * 11) % 30),
+  size: 14 + (index % 5) * 6,
+  delay: index * 0.28,
+  duration: 5 + (index % 4) * 0.78,
+  drift: (index % 2 === 0 ? 1 : -1) * (16 + (index % 4) * 8),
+  rise: 360 + (index % 5) * 84,
+  alpha: 0.45 + (index % 4) * 0.12
+}));
+const daySevenSparkSpecs = Array.from({ length: 14 }, (_, index) => ({
+  id: `day-seven-spark-${index}`,
+  x: 8 + ((index * 13) % 84),
+  y: 10 + ((index * 11) % 68),
+  size: 4 + (index % 4) * 2,
+  delay: index * 0.24,
+  duration: 2.2 + (index % 4) * 0.5,
+  drift: (index % 2 === 0 ? 1 : -1) * (8 + (index % 3) * 4),
+  rise: 10 + (index % 4) * 8,
+  alpha: 0.34 + (index % 4) * 0.12
+}));
+const dayEightDustSpecs = Array.from({ length: 24 }, (_, index) => ({
+  id: `day-eight-dust-${index}`,
+  x: 6 + ((index * 9) % 88),
+  y: 8 + ((index * 11) % 76),
+  size: 5 + (index % 5) * 2.8,
+  delay: index * 0.16,
+  duration: 3 + (index % 4) * 0.42,
+  drift: (index % 2 === 0 ? 1 : -1) * (14 + (index % 4) * 6),
+  rise: 26 + (index % 5) * 12,
+  alpha: 0.34 + (index % 4) * 0.14
+}));
+const dayNineSparkSpecs = Array.from({ length: 30 }, (_, index) => ({
+  id: `day-nine-spark-${index}`,
+  x: 4 + ((index * 9) % 92),
+  y: 4 + ((index * 7) % 90),
+  size: 4 + (index % 5) * 2.3,
+  delay: index * 0.14,
+  duration: 2.1 + (index % 5) * 0.42,
+  drift: (index % 2 === 0 ? 1 : -1) * (16 + (index % 4) * 8),
+  rise: 28 + (index % 4) * 14,
+  alpha: 0.46 + (index % 4) * 0.12
 }));
 const manorStarSpecs = Array.from({ length: 14 }, (_, index) => ({
   id: `star-${index}`,
@@ -419,6 +452,10 @@ function ManorMiniMapIllustration() {
   );
 }
 
+function isVideoSource(source: string) {
+  return /\.(mp4|mov|m4v|webm|ogg)$/i.test(source);
+}
+
 function normalizeTimeline(timeline: TimelineItem[]): TimelineItem[] {
   const source = timeline.length > 0 ? timeline : timelineDraftTemplate;
 
@@ -434,7 +471,8 @@ function normalizeTimeline(timeline: TimelineItem[]): TimelineItem[] {
         item?.text?.trim() ??
         "Escribe aqui lo que paso en este dia para completar su historia juntos.",
       photo: item?.photo,
-      photos: (item?.photos ?? []).filter((photo): photo is string => Boolean(photo?.trim()))
+      photos: (item?.photos ?? []).filter((photo): photo is string => Boolean(photo?.trim())),
+      media: (item?.media ?? []).filter((mediaItem): mediaItem is string => Boolean(mediaItem?.trim()))
     };
   });
 }
@@ -464,6 +502,8 @@ export default function TimelineSection({
   const [walkFrame, setWalkFrame] = useState<0 | 1>(0);
   const [princePosition, setPrincePosition] = useState<InteriorRoutePoint>(princeSpawnPoint);
   const [isFloorModalOpen, setIsFloorModalOpen] = useState(false);
+  const [daySevenMediaIndex, setDaySevenMediaIndex] = useState(0);
+  const [dayNineMediaIndex, setDayNineMediaIndex] = useState(0);
   const [dayFourPulseTime, setDayFourPulseTime] = useState(0);
   const dayFiveFxAudioContextRef = useRef<AudioContext | null>(null);
   const dayFiveOpenStateRef = useRef(false);
@@ -485,6 +525,9 @@ export default function TimelineSection({
   const isDateFourDay = activeStep === 3;
   const isDateFiveDay = activeStep === 4;
   const isDateSixDay = activeStep === 5;
+  const isDateSevenDay = activeStep === 6;
+  const isDateEightDay = activeStep === 7;
+  const isDateNineDay = activeStep === 8;
   const safeBeat = Math.min(1, Math.max(0, beat ?? 0));
   const dayFourEqBars = useMemo(() => {
     const bucketSource = audioLevels?.length ? audioLevels : [];
@@ -537,6 +580,50 @@ export default function TimelineSection({
 
     return merged.filter((photo, index) => merged.indexOf(photo) === index);
   }, [activeItem]);
+  const activeStoryMedia = useMemo(() => {
+    if (!activeItem) {
+      return [];
+    }
+
+    const preferred = activeItem.media?.length
+      ? activeItem.media
+      : [activeItem.photo, ...(activeItem.photos ?? [])];
+    const clean = preferred.filter((mediaItem): mediaItem is string => Boolean(mediaItem?.trim()));
+    return clean.filter((mediaItem, index) => clean.indexOf(mediaItem) === index);
+  }, [activeItem]);
+  const advanceDaySevenMedia = useCallback(() => {
+    if (activeStoryMedia.length <= 1) return;
+
+    setDaySevenMediaIndex((currentIndex) => (currentIndex + 1) % activeStoryMedia.length);
+  }, [activeStoryMedia.length]);
+  const advanceDayNineMedia = useCallback(() => {
+    if (activeStoryMedia.length <= 1) return;
+
+    setDayNineMediaIndex((currentIndex) => (currentIndex + 1) % activeStoryMedia.length);
+  }, [activeStoryMedia.length]);
+  const shiftDayNineMedia = useCallback(
+    (direction: 1 | -1) => {
+      if (activeStoryMedia.length <= 1) return;
+      setDayNineMediaIndex(
+        (currentIndex) => (currentIndex + direction + activeStoryMedia.length) % activeStoryMedia.length
+      );
+    },
+    [activeStoryMedia.length]
+  );
+  const daySevenMediaSource =
+    isDateSevenDay && activeStoryMedia.length > 0
+      ? activeStoryMedia[daySevenMediaIndex % activeStoryMedia.length] ?? null
+      : null;
+  const dayNineMediaSource =
+    isDateNineDay && activeStoryMedia.length > 0
+      ? activeStoryMedia[dayNineMediaIndex % activeStoryMedia.length] ?? null
+      : null;
+  const isDaySevenCurrentMediaVideo = Boolean(
+    daySevenMediaSource && isVideoSource(daySevenMediaSource)
+  );
+  const isDayNineCurrentMediaVideo = Boolean(
+    dayNineMediaSource && isVideoSource(dayNineMediaSource)
+  );
   const storyCardInitial = reduceMotion
     ? false
     : isDateThreeDay
@@ -547,6 +634,12 @@ export default function TimelineSection({
         ? { opacity: 0, y: 16, scale: 0.972, filter: "blur(3px) saturate(0.85)" }
       : isDateSixDay
         ? { opacity: 0, y: 16, scale: 0.972, filter: "blur(3px) saturate(0.85)" }
+      : isDateSevenDay
+        ? { opacity: 0, y: 16, scale: 0.972, filter: "blur(3px) saturate(0.88)" }
+      : isDateEightDay
+        ? { opacity: 0, y: 15, scale: 0.972, filter: "blur(3px) saturate(0.9)" }
+      : isDateNineDay
+        ? { opacity: 0, y: 15, scale: 0.972, filter: "blur(3px) saturate(0.92)" }
       : { opacity: 0, y: 10 };
   const storyCardAnimate = isDateThreeDay
     ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px) saturate(1)" }
@@ -555,6 +648,12 @@ export default function TimelineSection({
     : isDateFiveDay
       ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px) saturate(1)" }
     : isDateSixDay
+      ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px) saturate(1)" }
+    : isDateSevenDay
+      ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px) saturate(1)" }
+    : isDateEightDay
+      ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px) saturate(1)" }
+    : isDateNineDay
       ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px) saturate(1)" }
     : { opacity: 1, y: 0 };
   const storyCardExit = reduceMotion
@@ -567,6 +666,12 @@ export default function TimelineSection({
         ? { opacity: 0, y: -8, scale: 0.988, filter: "blur(2px) saturate(0.88)" }
       : isDateSixDay
         ? { opacity: 0, y: -8, scale: 0.988, filter: "blur(2px) saturate(0.88)" }
+      : isDateSevenDay
+        ? { opacity: 0, y: -8, scale: 0.988, filter: "blur(2px) saturate(0.9)" }
+      : isDateEightDay
+        ? { opacity: 0, y: -8, scale: 0.99, filter: "blur(2px) saturate(0.92)" }
+      : isDateNineDay
+        ? { opacity: 0, y: -8, scale: 0.99, filter: "blur(2px) saturate(0.94)" }
       : { opacity: 0, y: -8 };
   const storyCardTransition = {
     duration: reduceMotion
@@ -579,8 +684,23 @@ export default function TimelineSection({
         ? 0.28
       : isDateSixDay
         ? 0.28
+      : isDateSevenDay
+        ? 0.3
+      : isDateEightDay
+        ? 0.3
+      : isDateNineDay
+        ? 0.32
       : 0.22,
-    ease: isDateThreeDay || isDateFourDay || isDateFiveDay || isDateSixDay ? "easeInOut" : "easeOut"
+    ease:
+      isDateThreeDay ||
+      isDateFourDay ||
+      isDateFiveDay ||
+      isDateSixDay ||
+      isDateSevenDay ||
+      isDateEightDay ||
+      isDateNineDay
+        ? "easeInOut"
+        : "easeOut"
   } as const;
   const progress = (Math.max(activeStep + 1, 0) / totalSteps) * 100;
   const magicLevel = totalSteps > 1 ? Math.max(activeStep, 0) / (totalSteps - 1) : 0;
@@ -693,6 +813,57 @@ export default function TimelineSection({
     }
     dayFiveOpenStateRef.current = shouldTrigger;
   }, [isDateFiveDay, isFloorModalOpen, playDayFiveOpenFx]);
+
+  useEffect(() => {
+    setDaySevenMediaIndex(0);
+    setDayNineMediaIndex(0);
+  }, [activeStep, isFloorModalOpen]);
+
+  useEffect(() => {
+    if (
+      !isFloorModalOpen ||
+      !isDateSevenDay ||
+      activeStoryMedia.length <= 1 ||
+      isDaySevenCurrentMediaVideo
+    ) {
+      return;
+    }
+
+    const slideshowTimer = window.setTimeout(() => {
+      advanceDaySevenMedia();
+    }, 5000);
+
+    return () => window.clearTimeout(slideshowTimer);
+  }, [
+    activeStoryMedia.length,
+    advanceDaySevenMedia,
+    isDateSevenDay,
+    isDaySevenCurrentMediaVideo,
+    isFloorModalOpen
+  ]);
+
+  useEffect(() => {
+    if (
+      !isFloorModalOpen ||
+      !isDateNineDay ||
+      activeStoryMedia.length <= 1 ||
+      isDayNineCurrentMediaVideo
+    ) {
+      return;
+    }
+
+    const slideshowTimer = window.setTimeout(() => {
+      advanceDayNineMedia();
+    }, 5000);
+
+    return () => window.clearTimeout(slideshowTimer);
+  }, [
+    activeStoryMedia.length,
+    advanceDayNineMedia,
+    isDateNineDay,
+    isDayNineCurrentMediaVideo,
+    isFloorModalOpen
+  ]);
 
   useEffect(() => {
     return () => {
@@ -1185,7 +1356,10 @@ export default function TimelineSection({
                       isDateThreeDay ? "is-date-three-backdrop" : "",
                       isDateFourDay ? "is-date-four-backdrop" : "",
                       isDateFiveDay ? "is-date-five-backdrop" : "",
-                      isDateSixDay ? "is-date-six-backdrop" : ""
+                      isDateSixDay ? "is-date-six-backdrop" : "",
+                      isDateSevenDay ? "is-date-seven-backdrop" : "",
+                      isDateEightDay ? "is-date-eight-backdrop" : "",
+                      isDateNineDay ? "is-date-nine-backdrop" : ""
                     ]
                       .filter(Boolean)
                       .join(" ")}
@@ -1203,7 +1377,10 @@ export default function TimelineSection({
                         isDateThreeDay ? "is-date-three-modal" : "",
                         isDateFourDay ? "is-date-four-modal" : "",
                         isDateFiveDay ? "is-date-five-modal" : "",
-                        isDateSixDay ? "is-date-six-modal" : ""
+                        isDateSixDay ? "is-date-six-modal" : "",
+                        isDateSevenDay ? "is-date-seven-modal" : "",
+                        isDateEightDay ? "is-date-eight-modal" : "",
+                        isDateNineDay ? "is-date-nine-modal" : ""
                       ]
                         .filter(Boolean)
                         .join(" ")}
@@ -1236,7 +1413,10 @@ export default function TimelineSection({
                             isDateThreeDay ? "is-date-three-day" : "",
                             isDateFourDay ? "is-date-four-day" : "",
                             isDateFiveDay ? "is-date-five-day" : "",
-                            isDateSixDay ? "is-date-six-day" : ""
+                            isDateSixDay ? "is-date-six-day" : "",
+                            isDateSevenDay ? "is-date-seven-day" : "",
+                            isDateEightDay ? "is-date-eight-day" : "",
+                            isDateNineDay ? "is-date-nine-day" : ""
                           ]
                             .filter(Boolean)
                             .join(" ")}
@@ -1252,7 +1432,10 @@ export default function TimelineSection({
                             isDateThreeDay ? "is-date-three-day" : "",
                             isDateFourDay ? "is-date-four-day" : "",
                             isDateFiveDay ? "is-date-five-day" : "",
-                            isDateSixDay ? "is-date-six-day" : ""
+                            isDateSixDay ? "is-date-six-day" : "",
+                            isDateSevenDay ? "is-date-seven-day" : "",
+                            isDateEightDay ? "is-date-eight-day" : "",
+                            isDateNineDay ? "is-date-nine-day" : ""
                           ]
                             .filter(Boolean)
                             .join(" ")}
@@ -1272,7 +1455,10 @@ export default function TimelineSection({
                             isDateThreeDay ? "is-date-three-card" : "",
                             isDateFourDay ? "is-date-four-card" : "",
                             isDateFiveDay ? "is-date-five-card" : "",
-                            isDateSixDay ? "is-date-six-card" : ""
+                            isDateSixDay ? "is-date-six-card" : "",
+                            isDateSevenDay ? "is-date-seven-card" : "",
+                            isDateEightDay ? "is-date-eight-card" : "",
+                            isDateNineDay ? "is-date-nine-card" : ""
                           ]
                             .filter(Boolean)
                             .join(" ")}
@@ -1494,6 +1680,115 @@ export default function TimelineSection({
                               ))}
                             </span>
                           ) : null}
+                          {isDateSevenDay ? (
+                            <span className="timeline-date-seven-market" aria-hidden="true">
+                              <span className="timeline-date-seven-ambient" />
+                              <span className="timeline-date-seven-string-lights">
+                                {Array.from({ length: 18 }, (_, index) => (
+                                  <i
+                                    key={`day-seven-bulb-${index + 1}`}
+                                    style={
+                                      {
+                                        ["--bulb-delay" as string]: `${index * 0.14}s`
+                                      } as CSSProperties
+                                    }
+                                  />
+                                ))}
+                              </span>
+                              <span className="timeline-date-seven-sparks">
+                                {daySevenSparkSpecs.map((spark) => (
+                                  <i
+                                    key={spark.id}
+                                    style={
+                                      {
+                                        ["--spark-x" as string]: `${spark.x}%`,
+                                        ["--spark-y" as string]: `${spark.y}%`,
+                                        ["--spark-size" as string]: `${spark.size}px`,
+                                        ["--spark-delay" as string]: `${spark.delay}s`,
+                                        ["--spark-duration" as string]: `${spark.duration}s`,
+                                        ["--spark-drift" as string]: `${spark.drift}px`,
+                                        ["--spark-rise" as string]: `${spark.rise}px`,
+                                        ["--spark-alpha" as string]: `${spark.alpha}`
+                                      } as CSSProperties
+                                    }
+                                  />
+                                ))}
+                              </span>
+                            </span>
+                          ) : null}
+                          {isDateEightDay ? (
+                            <span className="timeline-date-eight-gallery" aria-hidden="true">
+                              <span className="timeline-date-eight-ambient" />
+                              <span className="timeline-date-eight-mirror mirror-left">
+                                <i />
+                              </span>
+                              <span className="timeline-date-eight-mirror mirror-right">
+                                <i />
+                              </span>
+                              <span className="timeline-date-eight-candle candle-left">
+                                <i className="timeline-date-eight-candle-flame" />
+                              </span>
+                              <span className="timeline-date-eight-candle candle-right">
+                                <i className="timeline-date-eight-candle-flame" />
+                              </span>
+                            </span>
+                          ) : null}
+                          {isDateEightDay ? (
+                            <span className="timeline-date-eight-dust-front" aria-hidden="true">
+                              {dayEightDustSpecs.map((dust) => (
+                                <i
+                                  key={dust.id}
+                                  style={
+                                    {
+                                      ["--day-eight-dust-x" as string]: `${dust.x}%`,
+                                      ["--day-eight-dust-y" as string]: `${dust.y}%`,
+                                      ["--day-eight-dust-size" as string]: `${dust.size}px`,
+                                      ["--day-eight-dust-delay" as string]: `${dust.delay}s`,
+                                      ["--day-eight-dust-duration" as string]: `${dust.duration}s`,
+                                      ["--day-eight-dust-drift" as string]: `${dust.drift}px`,
+                                      ["--day-eight-dust-rise" as string]: `${dust.rise}px`,
+                                      ["--day-eight-dust-alpha" as string]: `${dust.alpha}`
+                                    } as CSSProperties
+                                  }
+                                />
+                              ))}
+                            </span>
+                          ) : null}
+                          {isDateNineDay ? (
+                            <span className="timeline-date-nine-antechamber" aria-hidden="true">
+                              <span className="timeline-date-nine-ambient" />
+                              <span className="timeline-date-nine-arch" />
+                              <span className="timeline-date-nine-chandelier">
+                                <i className="chain" />
+                                <i className="core" />
+                              </span>
+                              <span className="timeline-date-nine-candles">
+                                <i className="candle left" />
+                                <i className="candle right" />
+                              </span>
+                            </span>
+                          ) : null}
+                          {isDateNineDay ? (
+                            <span className="timeline-date-nine-sparks-front" aria-hidden="true">
+                              {dayNineSparkSpecs.map((spark) => (
+                                <i
+                                  key={spark.id}
+                                  style={
+                                    {
+                                      ["--day-nine-spark-x" as string]: `${spark.x}%`,
+                                      ["--day-nine-spark-y" as string]: `${spark.y}%`,
+                                      ["--day-nine-spark-size" as string]: `${spark.size}px`,
+                                      ["--day-nine-spark-delay" as string]: `${spark.delay}s`,
+                                      ["--day-nine-spark-duration" as string]: `${spark.duration}s`,
+                                      ["--day-nine-spark-drift" as string]: `${spark.drift}px`,
+                                      ["--day-nine-spark-rise" as string]: `${spark.rise}px`,
+                                      ["--day-nine-spark-alpha" as string]: `${spark.alpha}`
+                                    } as CSSProperties
+                                  }
+                                />
+                              ))}
+                            </span>
+                          ) : null}
                           {isDateFourDay && activePhotos.length > 1 ? (
                             <div className="timeline-story-photo-grid timeline-story-photo-grid-date-four">
                               {activePhotos.slice(0, 2).map((photo, index) => (
@@ -1509,6 +1804,164 @@ export default function TimelineSection({
                                   />
                                 </figure>
                               ))}
+                            </div>
+                          ) : isDateEightDay && activePhotos.length > 1 ? (
+                            <div className="timeline-story-photo-grid timeline-story-photo-grid-date-eight">
+                              {activePhotos.slice(0, 2).map((photo, index) => (
+                                <figure
+                                  key={`timeline-day-${activeStep + 1}-photo-${index + 1}`}
+                                  className={`timeline-story-photo timeline-story-photo-duo day-eight-slot-${index + 1}`}
+                                >
+                                  <img
+                                    src={photo}
+                                    alt={`Recuerdo del dia ${activeStep + 1} - foto ${index + 1}`}
+                                    loading="lazy"
+                                    decoding="async"
+                                  />
+                                </figure>
+                              ))}
+                            </div>
+                          ) : isDateSevenDay && daySevenMediaSource ? (
+                            <div className="timeline-story-photo-stage-date-seven">
+                              <AnimatePresence mode="wait" initial={false}>
+                                <motion.figure
+                                  key={`timeline-day-seven-media-${daySevenMediaIndex}`}
+                                  className={`timeline-story-photo timeline-story-photo-day-seven ${
+                                    isDaySevenCurrentMediaVideo ? "is-video" : "is-photo"
+                                  }`}
+                                  initial={
+                                    reduceMotion
+                                      ? false
+                                      : { opacity: 0, y: 8, scale: 0.985, filter: "blur(1.5px)" }
+                                  }
+                                  animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                                  exit={
+                                    reduceMotion
+                                      ? { opacity: 0 }
+                                      : { opacity: 0, y: -8, scale: 1.01, filter: "blur(1.2px)" }
+                                  }
+                                  transition={{
+                                    duration: reduceMotion ? 0.01 : 0.46,
+                                    ease: [0.23, 1, 0.32, 1]
+                                  }}
+                                >
+                                  {isVideoSource(daySevenMediaSource) ? (
+                                    <video
+                                      src={daySevenMediaSource}
+                                      className="timeline-story-video"
+                                      autoPlay
+                                      muted
+                                      playsInline
+                                      preload="metadata"
+                                      onEnded={advanceDaySevenMedia}
+                                      onError={advanceDaySevenMedia}
+                                    />
+                                  ) : (
+                                    <img
+                                      src={daySevenMediaSource}
+                                      alt={`Recuerdo del dia ${activeStep + 1}`}
+                                      loading="lazy"
+                                      decoding="async"
+                                    />
+                                  )}
+                                </motion.figure>
+                              </AnimatePresence>
+                              {activeStoryMedia.length > 1 ? (
+                                <span className="timeline-date-seven-media-counter">
+                                  {daySevenMediaIndex + 1} / {activeStoryMedia.length}
+                                </span>
+                              ) : null}
+                            </div>
+                          ) : isDateNineDay && dayNineMediaSource ? (
+                            <div className="timeline-story-photo-stage-date-nine">
+                              <AnimatePresence mode="wait" initial={false}>
+                                <motion.figure
+                                  key={`timeline-day-nine-media-${dayNineMediaIndex}`}
+                                  className={`timeline-story-photo timeline-story-photo-day-nine ${
+                                    isDayNineCurrentMediaVideo ? "is-video" : "is-photo"
+                                  }`}
+                                  initial={
+                                    reduceMotion
+                                      ? false
+                                      : { opacity: 0, y: 10, scale: 0.985, filter: "blur(1.6px)" }
+                                  }
+                                  animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                                  exit={
+                                    reduceMotion
+                                      ? { opacity: 0 }
+                                      : { opacity: 0, y: -9, scale: 1.01, filter: "blur(1.4px)" }
+                                  }
+                                  transition={{
+                                    duration: reduceMotion ? 0.01 : 0.48,
+                                    ease: [0.23, 1, 0.32, 1]
+                                  }}
+                                >
+                                  {isVideoSource(dayNineMediaSource) ? (
+                                    <video
+                                      src={dayNineMediaSource}
+                                      className="timeline-story-video"
+                                      autoPlay
+                                      muted
+                                      controls
+                                      playsInline
+                                      preload="metadata"
+                                      onEnded={advanceDayNineMedia}
+                                      onError={advanceDayNineMedia}
+                                    />
+                                  ) : (
+                                    <img
+                                      src={dayNineMediaSource}
+                                      alt={`Recuerdo del dia ${activeStep + 1}`}
+                                      loading="lazy"
+                                      decoding="async"
+                                    />
+                                  )}
+                                </motion.figure>
+                              </AnimatePresence>
+                              <span className="timeline-date-nine-front-overlay" aria-hidden="true">
+                                {dayNineSparkSpecs.map((spark) => (
+                                  <i
+                                    key={`day-nine-front-${spark.id}`}
+                                    style={
+                                      {
+                                        ["--day-nine-front-x" as string]: `${spark.x}%`,
+                                        ["--day-nine-front-y" as string]: `${spark.y}%`,
+                                        ["--day-nine-front-size" as string]: `${spark.size}px`,
+                                        ["--day-nine-front-delay" as string]: `${spark.delay}s`,
+                                        ["--day-nine-front-duration" as string]: `${spark.duration}s`,
+                                        ["--day-nine-front-drift" as string]: `${spark.drift}px`,
+                                        ["--day-nine-front-rise" as string]: `${spark.rise}px`,
+                                        ["--day-nine-front-alpha" as string]: `${spark.alpha}`
+                                      } as CSSProperties
+                                    }
+                                  />
+                                ))}
+                              </span>
+                              {activeStoryMedia.length > 1 ? (
+                                <div className="timeline-date-nine-media-controls">
+                                  <button
+                                    type="button"
+                                    className="timeline-date-nine-media-arrow is-prev"
+                                    onClick={() => shiftDayNineMedia(-1)}
+                                    aria-label="Media anterior"
+                                  >
+                                    ‹
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="timeline-date-nine-media-arrow is-next"
+                                    onClick={() => shiftDayNineMedia(1)}
+                                    aria-label="Media siguiente"
+                                  >
+                                    ›
+                                  </button>
+                                </div>
+                              ) : null}
+                              {activeStoryMedia.length > 1 ? (
+                                <span className="timeline-date-nine-media-counter">
+                                  {dayNineMediaIndex + 1} / {activeStoryMedia.length}
+                                </span>
+                              ) : null}
                             </div>
                           ) : activePhotos.length > 0 ? (
                             <figure className="timeline-story-photo">
@@ -1546,7 +1999,10 @@ export default function TimelineSection({
                           isDateThreeDay ? "is-date-three-day" : "",
                           isDateFourDay ? "is-date-four-day" : "",
                           isDateFiveDay ? "is-date-five-day" : "",
-                          isDateSixDay ? "is-date-six-day" : ""
+                          isDateSixDay ? "is-date-six-day" : "",
+                          isDateSevenDay ? "is-date-seven-day" : "",
+                          isDateEightDay ? "is-date-eight-day" : "",
+                          isDateNineDay ? "is-date-nine-day" : ""
                         ]
                           .filter(Boolean)
                           .join(" ")}

@@ -26,6 +26,7 @@ export type TimelineItem = {
   text: string;
   photo?: string;
   photos?: string[];
+  media?: string[];
 };
 
 export type GalleryPhoto = {
@@ -112,6 +113,17 @@ const fourthDateMainPhoto = asset("photos/cita primera vez navideña/IMG_3384.jp
 const fourthDateAltPhoto = asset("photos/cita primera vez navideña/IMG_3382.jpg");
 const fifthDatePhoto = asset("photos/declaracion 10 de enero de 2025/1babefeb-6f68-49b0-b69b-ac7c4fce8858.jpeg");
 const sixthDatePhoto = asset("photos/balneario/IMG_3886.jpg");
+const seventhDatePhoto = asset("photos/balneario/IMG_5259.jpg");
+const seventhDateVideoOne = asset("photos/balneario/IMG_5260.MOV");
+const seventhDateVideoTwo = asset("photos/balneario/7ac9caf0-5c57-407a-9ed1-09029405a9c0.MP4");
+const eighthDateMainPhoto = asset("photos/playita/e57edfa3-ee34-4042-b761-21b622b70768.jpeg");
+const eighthDateAltPhoto = asset("photos/playita/b6e0b387-db8c-477c-9883-e2c504420643.jpeg");
+const ninthDatePhotoOne = asset("photos/boda y graduacion/IMG_8274.jpg");
+const ninthDatePhotoTwo = asset("photos/boda y graduacion/IMG_8281.jpg");
+const ninthDatePhotoThree = asset("photos/boda y graduacion/IMG_8801.jpg");
+const ninthDatePhotoFour = asset("photos/boda y graduacion/d5a462eb-e217-483a-8775-8bfd26a56401.JPG");
+const ninthDatePhotoFive = asset("photos/boda y graduacion/1a51c305-aa7d-4c9b-b1f3-5315cf140dc9.JPG");
+const ninthDateVideoOne = asset("photos/boda y graduacion/IMG_5034.MOV");
 
 const photosPlayita: string[] = [
   asset("photos/playita/19957e32-3058-4da3-a0ec-4fd809f02e7b.jpeg"),
@@ -222,17 +234,28 @@ const data: ContentData = {
     {
       date: "Junio de 2025",
       title: "Nuestras salidas al centro",
-      text: "Ir contigo al centro, aunque parezca algo simple, se volvio especial para mi. Me encanta verte feliz con los detalles que te gustan y poder consentirte. Si pudiera, te daria todo: tus cosas favoritas, tus hobbies, y mil formas nuevas de recordarte cuanto te amo."
+      text: "Ir contigo al centro, aunque parezca algo simple, se volvio especial para mi. Me encanta verte feliz con los detalles que te gustan y poder consentirte. Si pudiera, te daria todo: tus cosas favoritas, tus hobbies, y mil formas nuevas de recordarte cuanto te amo.",
+      media: [seventhDatePhoto, seventhDateVideoOne, seventhDateVideoTwo]
     },
     {
       date: "Agosto de 2025",
-      title: "Complicidad, ternura y confianza",
-      text: "Entre abrazos largos y momentos solo nuestros descubrimos una conexion unica. Contigo todo se siente intenso y tierno al mismo tiempo, y eso me encanta. Son recuerdos que guardo con respeto y amor, porque me recuerdan la confianza real que hemos construido."
+      title: "Galeria de secretos en la playita",
+      text: "Este cuarto guarda una de mis memorias favoritas contigo: caminar juntos, sentir la arena y quedarnos abrazados bajo la palapa. Fue una tarde simple pero perfecta, de esas que me recuerdan que contigo todo se vuelve especial. Aqui entendi que mi lugar favorito siempre sera donde estes tu.",
+      photo: eighthDateMainPhoto,
+      photos: [eighthDateAltPhoto]
     },
     {
       date: "22 de noviembre y 20 de diciembre de 2025",
-      title: "Temporada elegante: boda y graduacion",
-      text: "La boda y la graduacion se volvieron recuerdos enormes por verte ahi conmigo. Te veias preciosa, elegante y llena de luz. Bailar contigo y compartir esas noches me dejo una promesa: seguir creciendo juntos y disfrutar cada etapa como equipo."
+      title: "Antesala de la torre: elegancia y promesa",
+      text: "Este cuarto es nuestra antesala final: noches elegantes, tu sonrisa brillando y mi mirada completamente enamorada de ti. Verte en vestido azul fue de esos momentos que se quedan para siempre en el alma. Entre boda y graduacion, confirme que quiero seguir celebrando cada etapa a tu lado.",
+      media: [
+        ninthDatePhotoOne,
+        ninthDatePhotoTwo,
+        ninthDatePhotoThree,
+        ninthDatePhotoFour,
+        ninthDatePhotoFive,
+        ninthDateVideoOne
+      ]
     },
     {
       date: "10 de enero, 31 de enero y 5 de febrero de 2026",
