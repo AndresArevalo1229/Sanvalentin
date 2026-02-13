@@ -53,7 +53,8 @@ const createWindow = () => {
     appendRuntimeLog("window-unresponsive");
   });
 
-  const devServerUrl = process.env.VITE_DEV_SERVER_URL;
+  // In development, fall back to local Vite URL so scripts work on macOS/Windows shells.
+  const devServerUrl = process.env.VITE_DEV_SERVER_URL || (!app.isPackaged ? "http://localhost:5173" : "");
   if (devServerUrl) {
     win.loadURL(devServerUrl);
   } else {
