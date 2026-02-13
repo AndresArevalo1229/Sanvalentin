@@ -124,6 +124,11 @@ const ninthDatePhotoThree = asset("photos/boda y graduacion/IMG_8801.jpg");
 const ninthDatePhotoFour = asset("photos/boda y graduacion/d5a462eb-e217-483a-8775-8bfd26a56401.JPG");
 const ninthDatePhotoFive = asset("photos/boda y graduacion/1a51c305-aa7d-4c9b-b1f3-5315cf140dc9.JPG");
 const ninthDateVideoOne = asset("photos/boda y graduacion/IMG_5034.MOV");
+const tenthDatePhotoOne = asset("photos/1 año de novios 10 de enero acuario michin/IMG_9147.jpeg");
+const tenthDatePhotoTwo = asset("photos/1 año de novios 10 de enero acuario michin/IMG_9116.jpeg");
+const tenthDatePhotoThree = asset("photos/1 año de novios 10 de enero acuario michin/IMG_9119.jpeg");
+const tenthDatePhotoFour = asset("photos/1 año de novios 10 de enero acuario michin/IMG_9141.jpeg");
+const tenthDatePhotoFive = asset("photos/1 año de novios 10 de enero acuario michin/92572dcd-7285-444d-8036-1d8f0d14d6e2.JPG");
 
 const photosPlayita: string[] = [
   asset("photos/playita/19957e32-3058-4da3-a0ec-4fd809f02e7b.jpeg"),
@@ -259,8 +264,15 @@ const data: ContentData = {
     },
     {
       date: "10 de enero, 31 de enero y 5 de febrero de 2026",
-      title: "Aniversario, graduacion y noche de gala",
-      text: "Nuestro aniversario en Michin, tu graduacion y aquella noche de gala fueron una confirmacion de lo mucho que te amo. Verte feliz, arreglada y brillando me deja claro que te quiero en mi presente y en mi futuro. Quiero seguir caminando contigo, cuidarte y elegirte todos los dias."
+      title: "Torre final: un ano contigo",
+      text: "Este cuarto final es nuestra promesa en voz alta: un ano de novios, aventuras en Michin y mas motivos para seguir tomados de la mano. Verte sonreir entre luces azules y cada foto de ese dia me recuerda que contigo todo vale mas. Gracias por ser mi hogar favorito; quiero seguir escribiendo esta historia contigo, siempre.",
+      media: [
+        tenthDatePhotoOne,
+        tenthDatePhotoTwo,
+        tenthDatePhotoThree,
+        tenthDatePhotoFour,
+        tenthDatePhotoFive
+      ]
     }
   ],
   gallery: [

@@ -198,6 +198,17 @@ const dayNineSparkSpecs = Array.from({ length: 30 }, (_, index) => ({
   rise: 28 + (index % 4) * 14,
   alpha: 0.46 + (index % 4) * 0.12
 }));
+const dayTenSparkSpecs = Array.from({ length: 34 }, (_, index) => ({
+  id: `day-ten-spark-${index}`,
+  x: 3 + ((index * 8) % 94),
+  y: 3 + ((index * 11) % 92),
+  size: 4 + (index % 5) * 2.2,
+  delay: index * 0.13,
+  duration: 2 + (index % 5) * 0.4,
+  drift: (index % 2 === 0 ? 1 : -1) * (18 + (index % 4) * 8),
+  rise: 32 + (index % 4) * 15,
+  alpha: 0.48 + (index % 4) * 0.12
+}));
 const manorStarSpecs = Array.from({ length: 14 }, (_, index) => ({
   id: `star-${index}`,
   x: 6 + ((index * 29) % 88),
@@ -504,6 +515,7 @@ export default function TimelineSection({
   const [isFloorModalOpen, setIsFloorModalOpen] = useState(false);
   const [daySevenMediaIndex, setDaySevenMediaIndex] = useState(0);
   const [dayNineMediaIndex, setDayNineMediaIndex] = useState(0);
+  const [dayTenMediaIndex, setDayTenMediaIndex] = useState(0);
   const [dayFourPulseTime, setDayFourPulseTime] = useState(0);
   const dayFiveFxAudioContextRef = useRef<AudioContext | null>(null);
   const dayFiveOpenStateRef = useRef(false);
@@ -528,6 +540,7 @@ export default function TimelineSection({
   const isDateSevenDay = activeStep === 6;
   const isDateEightDay = activeStep === 7;
   const isDateNineDay = activeStep === 8;
+  const isDateTenDay = activeStep === 9;
   const safeBeat = Math.min(1, Math.max(0, beat ?? 0));
   const dayFourEqBars = useMemo(() => {
     const bucketSource = audioLevels?.length ? audioLevels : [];
@@ -601,10 +614,24 @@ export default function TimelineSection({
 
     setDayNineMediaIndex((currentIndex) => (currentIndex + 1) % activeStoryMedia.length);
   }, [activeStoryMedia.length]);
+  const advanceDayTenMedia = useCallback(() => {
+    if (activeStoryMedia.length <= 1) return;
+
+    setDayTenMediaIndex((currentIndex) => (currentIndex + 1) % activeStoryMedia.length);
+  }, [activeStoryMedia.length]);
   const shiftDayNineMedia = useCallback(
     (direction: 1 | -1) => {
       if (activeStoryMedia.length <= 1) return;
       setDayNineMediaIndex(
+        (currentIndex) => (currentIndex + direction + activeStoryMedia.length) % activeStoryMedia.length
+      );
+    },
+    [activeStoryMedia.length]
+  );
+  const shiftDayTenMedia = useCallback(
+    (direction: 1 | -1) => {
+      if (activeStoryMedia.length <= 1) return;
+      setDayTenMediaIndex(
         (currentIndex) => (currentIndex + direction + activeStoryMedia.length) % activeStoryMedia.length
       );
     },
@@ -618,11 +645,18 @@ export default function TimelineSection({
     isDateNineDay && activeStoryMedia.length > 0
       ? activeStoryMedia[dayNineMediaIndex % activeStoryMedia.length] ?? null
       : null;
+  const dayTenMediaSource =
+    isDateTenDay && activeStoryMedia.length > 0
+      ? activeStoryMedia[dayTenMediaIndex % activeStoryMedia.length] ?? null
+      : null;
   const isDaySevenCurrentMediaVideo = Boolean(
     daySevenMediaSource && isVideoSource(daySevenMediaSource)
   );
   const isDayNineCurrentMediaVideo = Boolean(
     dayNineMediaSource && isVideoSource(dayNineMediaSource)
+  );
+  const isDayTenCurrentMediaVideo = Boolean(
+    dayTenMediaSource && isVideoSource(dayTenMediaSource)
   );
   const storyCardInitial = reduceMotion
     ? false
@@ -640,6 +674,8 @@ export default function TimelineSection({
         ? { opacity: 0, y: 15, scale: 0.972, filter: "blur(3px) saturate(0.9)" }
       : isDateNineDay
         ? { opacity: 0, y: 15, scale: 0.972, filter: "blur(3px) saturate(0.92)" }
+      : isDateTenDay
+        ? { opacity: 0, y: 15, scale: 0.972, filter: "blur(3px) saturate(0.95)" }
       : { opacity: 0, y: 10 };
   const storyCardAnimate = isDateThreeDay
     ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px) saturate(1)" }
@@ -654,6 +690,8 @@ export default function TimelineSection({
     : isDateEightDay
       ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px) saturate(1)" }
     : isDateNineDay
+      ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px) saturate(1)" }
+    : isDateTenDay
       ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px) saturate(1)" }
     : { opacity: 1, y: 0 };
   const storyCardExit = reduceMotion
@@ -672,6 +710,8 @@ export default function TimelineSection({
         ? { opacity: 0, y: -8, scale: 0.99, filter: "blur(2px) saturate(0.92)" }
       : isDateNineDay
         ? { opacity: 0, y: -8, scale: 0.99, filter: "blur(2px) saturate(0.94)" }
+      : isDateTenDay
+        ? { opacity: 0, y: -8, scale: 0.99, filter: "blur(2px) saturate(0.95)" }
       : { opacity: 0, y: -8 };
   const storyCardTransition = {
     duration: reduceMotion
@@ -690,6 +730,8 @@ export default function TimelineSection({
         ? 0.3
       : isDateNineDay
         ? 0.32
+      : isDateTenDay
+        ? 0.34
       : 0.22,
     ease:
       isDateThreeDay ||
@@ -698,7 +740,8 @@ export default function TimelineSection({
       isDateSixDay ||
       isDateSevenDay ||
       isDateEightDay ||
-      isDateNineDay
+      isDateNineDay ||
+      isDateTenDay
         ? "easeInOut"
         : "easeOut"
   } as const;
@@ -817,6 +860,7 @@ export default function TimelineSection({
   useEffect(() => {
     setDaySevenMediaIndex(0);
     setDayNineMediaIndex(0);
+    setDayTenMediaIndex(0);
   }, [activeStep, isFloorModalOpen]);
 
   useEffect(() => {
@@ -862,6 +906,29 @@ export default function TimelineSection({
     advanceDayNineMedia,
     isDateNineDay,
     isDayNineCurrentMediaVideo,
+    isFloorModalOpen
+  ]);
+
+  useEffect(() => {
+    if (
+      !isFloorModalOpen ||
+      !isDateTenDay ||
+      activeStoryMedia.length <= 1 ||
+      isDayTenCurrentMediaVideo
+    ) {
+      return;
+    }
+
+    const slideshowTimer = window.setTimeout(() => {
+      advanceDayTenMedia();
+    }, 5000);
+
+    return () => window.clearTimeout(slideshowTimer);
+  }, [
+    activeStoryMedia.length,
+    advanceDayTenMedia,
+    isDateTenDay,
+    isDayTenCurrentMediaVideo,
     isFloorModalOpen
   ]);
 
@@ -1359,7 +1426,8 @@ export default function TimelineSection({
                       isDateSixDay ? "is-date-six-backdrop" : "",
                       isDateSevenDay ? "is-date-seven-backdrop" : "",
                       isDateEightDay ? "is-date-eight-backdrop" : "",
-                      isDateNineDay ? "is-date-nine-backdrop" : ""
+                      isDateNineDay ? "is-date-nine-backdrop" : "",
+                      isDateTenDay ? "is-date-ten-backdrop" : ""
                     ]
                       .filter(Boolean)
                       .join(" ")}
@@ -1380,7 +1448,8 @@ export default function TimelineSection({
                         isDateSixDay ? "is-date-six-modal" : "",
                         isDateSevenDay ? "is-date-seven-modal" : "",
                         isDateEightDay ? "is-date-eight-modal" : "",
-                        isDateNineDay ? "is-date-nine-modal" : ""
+                        isDateNineDay ? "is-date-nine-modal" : "",
+                        isDateTenDay ? "is-date-ten-modal" : ""
                       ]
                         .filter(Boolean)
                         .join(" ")}
@@ -1416,7 +1485,8 @@ export default function TimelineSection({
                             isDateSixDay ? "is-date-six-day" : "",
                             isDateSevenDay ? "is-date-seven-day" : "",
                             isDateEightDay ? "is-date-eight-day" : "",
-                            isDateNineDay ? "is-date-nine-day" : ""
+                            isDateNineDay ? "is-date-nine-day" : "",
+                            isDateTenDay ? "is-date-ten-day" : ""
                           ]
                             .filter(Boolean)
                             .join(" ")}
@@ -1435,7 +1505,8 @@ export default function TimelineSection({
                             isDateSixDay ? "is-date-six-day" : "",
                             isDateSevenDay ? "is-date-seven-day" : "",
                             isDateEightDay ? "is-date-eight-day" : "",
-                            isDateNineDay ? "is-date-nine-day" : ""
+                            isDateNineDay ? "is-date-nine-day" : "",
+                            isDateTenDay ? "is-date-ten-day" : ""
                           ]
                             .filter(Boolean)
                             .join(" ")}
@@ -1458,7 +1529,8 @@ export default function TimelineSection({
                             isDateSixDay ? "is-date-six-card" : "",
                             isDateSevenDay ? "is-date-seven-card" : "",
                             isDateEightDay ? "is-date-eight-card" : "",
-                            isDateNineDay ? "is-date-nine-card" : ""
+                            isDateNineDay ? "is-date-nine-card" : "",
+                            isDateTenDay ? "is-date-ten-card" : ""
                           ]
                             .filter(Boolean)
                             .join(" ")}
@@ -1789,6 +1861,35 @@ export default function TimelineSection({
                               ))}
                             </span>
                           ) : null}
+                          {isDateTenDay ? (
+                            <span className="timeline-date-ten-crownroom" aria-hidden="true">
+                              <span className="timeline-date-ten-ambient" />
+                              <span className="timeline-date-ten-crown-halo" />
+                              <span className="timeline-date-ten-aqua-beam beam-left" />
+                              <span className="timeline-date-ten-aqua-beam beam-right" />
+                            </span>
+                          ) : null}
+                          {isDateTenDay ? (
+                            <span className="timeline-date-ten-front-sparks" aria-hidden="true">
+                              {dayTenSparkSpecs.map((spark) => (
+                                <i
+                                  key={spark.id}
+                                  style={
+                                    {
+                                      ["--day-ten-spark-x" as string]: `${spark.x}%`,
+                                      ["--day-ten-spark-y" as string]: `${spark.y}%`,
+                                      ["--day-ten-spark-size" as string]: `${spark.size}px`,
+                                      ["--day-ten-spark-delay" as string]: `${spark.delay}s`,
+                                      ["--day-ten-spark-duration" as string]: `${spark.duration}s`,
+                                      ["--day-ten-spark-drift" as string]: `${spark.drift}px`,
+                                      ["--day-ten-spark-rise" as string]: `${spark.rise}px`,
+                                      ["--day-ten-spark-alpha" as string]: `${spark.alpha}`
+                                    } as CSSProperties
+                                  }
+                                />
+                              ))}
+                            </span>
+                          ) : null}
                           {isDateFourDay && activePhotos.length > 1 ? (
                             <div className="timeline-story-photo-grid timeline-story-photo-grid-date-four">
                               {activePhotos.slice(0, 2).map((photo, index) => (
@@ -1918,6 +2019,25 @@ export default function TimelineSection({
                                   )}
                                 </motion.figure>
                               </AnimatePresence>
+                              <AnimatePresence mode="wait" initial={false}>
+                                <motion.span
+                                  key={`timeline-day-nine-flash-${dayNineMediaIndex}`}
+                                  className="timeline-date-nine-camera-flash"
+                                  aria-hidden="true"
+                                  initial={reduceMotion ? false : { opacity: 0, scale: 0.98 }}
+                                  animate={
+                                    reduceMotion
+                                      ? { opacity: 0 }
+                                      : { opacity: [0, 0.96, 0.36, 0], scale: [0.98, 1.03, 1.01, 1] }
+                                  }
+                                  exit={{ opacity: 0 }}
+                                  transition={{
+                                    duration: reduceMotion ? 0.01 : 0.44,
+                                    ease: "easeOut",
+                                    times: [0, 0.16, 0.34, 1]
+                                  }}
+                                />
+                              </AnimatePresence>
                               <span className="timeline-date-nine-front-overlay" aria-hidden="true">
                                 {dayNineSparkSpecs.map((spark) => (
                                   <i
@@ -1963,6 +2083,116 @@ export default function TimelineSection({
                                 </span>
                               ) : null}
                             </div>
+                          ) : isDateTenDay && dayTenMediaSource ? (
+                            <div className="timeline-story-photo-stage-date-ten">
+                              <AnimatePresence mode="wait" initial={false}>
+                                <motion.figure
+                                  key={`timeline-day-ten-media-${dayTenMediaIndex}`}
+                                  className={`timeline-story-photo timeline-story-photo-day-ten ${
+                                    isDayTenCurrentMediaVideo ? "is-video" : "is-photo"
+                                  }`}
+                                  initial={
+                                    reduceMotion
+                                      ? false
+                                      : { opacity: 0, y: 10, scale: 0.985, filter: "blur(1.6px)" }
+                                  }
+                                  animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                                  exit={
+                                    reduceMotion
+                                      ? { opacity: 0 }
+                                      : { opacity: 0, y: -9, scale: 1.01, filter: "blur(1.4px)" }
+                                  }
+                                  transition={{
+                                    duration: reduceMotion ? 0.01 : 0.48,
+                                    ease: [0.23, 1, 0.32, 1]
+                                  }}
+                                >
+                                  {isVideoSource(dayTenMediaSource) ? (
+                                    <video
+                                      src={dayTenMediaSource}
+                                      className="timeline-story-video"
+                                      autoPlay
+                                      muted
+                                      controls
+                                      playsInline
+                                      preload="metadata"
+                                      onEnded={advanceDayTenMedia}
+                                      onError={advanceDayTenMedia}
+                                    />
+                                  ) : (
+                                    <img
+                                      src={dayTenMediaSource}
+                                      alt={`Recuerdo del dia ${activeStep + 1}`}
+                                      loading="lazy"
+                                      decoding="async"
+                                    />
+                                  )}
+                                </motion.figure>
+                              </AnimatePresence>
+                              <AnimatePresence mode="wait" initial={false}>
+                                <motion.span
+                                  key={`timeline-day-ten-flash-${dayTenMediaIndex}`}
+                                  className="timeline-date-ten-camera-flash"
+                                  aria-hidden="true"
+                                  initial={reduceMotion ? false : { opacity: 0, scale: 0.98 }}
+                                  animate={
+                                    reduceMotion
+                                      ? { opacity: 0 }
+                                      : { opacity: [0, 0.96, 0.36, 0], scale: [0.98, 1.03, 1.01, 1] }
+                                  }
+                                  exit={{ opacity: 0 }}
+                                  transition={{
+                                    duration: reduceMotion ? 0.01 : 0.44,
+                                    ease: "easeOut",
+                                    times: [0, 0.16, 0.34, 1]
+                                  }}
+                                />
+                              </AnimatePresence>
+                              <span className="timeline-date-ten-front-overlay" aria-hidden="true">
+                                {dayTenSparkSpecs.map((spark) => (
+                                  <i
+                                    key={`day-ten-front-${spark.id}`}
+                                    style={
+                                      {
+                                        ["--day-ten-front-x" as string]: `${spark.x}%`,
+                                        ["--day-ten-front-y" as string]: `${spark.y}%`,
+                                        ["--day-ten-front-size" as string]: `${spark.size}px`,
+                                        ["--day-ten-front-delay" as string]: `${spark.delay}s`,
+                                        ["--day-ten-front-duration" as string]: `${spark.duration}s`,
+                                        ["--day-ten-front-drift" as string]: `${spark.drift}px`,
+                                        ["--day-ten-front-rise" as string]: `${spark.rise}px`,
+                                        ["--day-ten-front-alpha" as string]: `${spark.alpha}`
+                                      } as CSSProperties
+                                    }
+                                  />
+                                ))}
+                              </span>
+                              {activeStoryMedia.length > 1 ? (
+                                <div className="timeline-date-ten-media-controls">
+                                  <button
+                                    type="button"
+                                    className="timeline-date-ten-media-arrow is-prev"
+                                    onClick={() => shiftDayTenMedia(-1)}
+                                    aria-label="Media anterior"
+                                  >
+                                    ‹
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="timeline-date-ten-media-arrow is-next"
+                                    onClick={() => shiftDayTenMedia(1)}
+                                    aria-label="Media siguiente"
+                                  >
+                                    ›
+                                  </button>
+                                </div>
+                              ) : null}
+                              {activeStoryMedia.length > 1 ? (
+                                <span className="timeline-date-ten-media-counter">
+                                  {dayTenMediaIndex + 1} / {activeStoryMedia.length}
+                                </span>
+                              ) : null}
+                            </div>
                           ) : activePhotos.length > 0 ? (
                             <figure className="timeline-story-photo">
                               <img
@@ -2002,7 +2232,8 @@ export default function TimelineSection({
                           isDateSixDay ? "is-date-six-day" : "",
                           isDateSevenDay ? "is-date-seven-day" : "",
                           isDateEightDay ? "is-date-eight-day" : "",
-                          isDateNineDay ? "is-date-nine-day" : ""
+                          isDateNineDay ? "is-date-nine-day" : "",
+                          isDateTenDay ? "is-date-ten-day" : ""
                         ]
                           .filter(Boolean)
                           .join(" ")}

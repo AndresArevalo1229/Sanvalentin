@@ -8543,6 +8543,31 @@ body.motion-soft .section-room-music-fx {
   z-index: 11;
 }
 
+.timeline-date-nine-camera-flash {
+  position: absolute;
+  inset: -4%;
+  z-index: 12;
+  pointer-events: none;
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.98), rgba(255, 248, 230, 0.88) 30%, rgba(173, 213, 255, 0.42) 54%, rgba(173, 213, 255, 0) 74%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.56), rgba(255, 255, 255, 0));
+  mix-blend-mode: screen;
+  filter: blur(0.4px);
+}
+
+.timeline-date-nine-camera-flash::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(228, 242, 255, 0.86);
+  box-shadow:
+    0 0 28px rgba(220, 238, 255, 0.62),
+    inset 0 0 16px rgba(255, 255, 255, 0.36);
+  opacity: 0.9;
+}
+
 .timeline-date-nine-front-overlay::before {
   content: "";
   position: absolute;
@@ -8645,6 +8670,361 @@ body.motion-soft .section-room-music-fx {
   border-color: rgba(101, 136, 179, 0.32);
   background: rgba(226, 238, 254, 0.92);
   color: rgba(40, 68, 112, 0.94);
+}
+
+.timeline-story-card.is-date-ten-card {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(58, 144, 181, 0.5);
+  background:
+    radial-gradient(circle at 86% 8%, rgba(150, 237, 255, 0.32), transparent 38%),
+    radial-gradient(circle at 14% 12%, rgba(225, 246, 255, 0.24), transparent 42%),
+    linear-gradient(156deg, rgba(230, 245, 255, 0.99), rgba(176, 218, 236, 0.97));
+  box-shadow:
+    0 24px 38px rgba(14, 57, 74, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    inset 0 -18px 30px rgba(53, 140, 170, 0.2);
+}
+
+.timeline-story-card.is-date-ten-card > :not(.timeline-date-ten-crownroom):not(.timeline-date-ten-front-sparks) {
+  position: relative;
+  z-index: 2;
+}
+
+.timeline-date-ten-crownroom {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.timeline-date-ten-ambient {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% -4%, rgba(255, 236, 182, 0.3), transparent 46%),
+    radial-gradient(circle at 50% 34%, rgba(170, 235, 255, 0.34), transparent 58%),
+    linear-gradient(180deg, rgba(14, 65, 88, 0.16), rgba(14, 65, 88, 0) 56%);
+  animation: timelineDateTenAmbientPulse 7.4s ease-in-out infinite;
+}
+
+.timeline-date-ten-crown-halo {
+  position: absolute;
+  left: 50%;
+  top: 58px;
+  width: min(86%, 520px);
+  height: 180px;
+  transform: translateX(-50%);
+  border-radius: 280px 280px 30px 30px;
+  border: 1px solid rgba(95, 163, 196, 0.48);
+  background:
+    radial-gradient(circle at 50% 24%, rgba(255, 242, 214, 0.56), rgba(196, 232, 248, 0.34) 54%, rgba(160, 214, 236, 0.16) 100%);
+  box-shadow:
+    inset 0 0 0 3px rgba(235, 249, 255, 0.36),
+    inset 0 -18px 24px rgba(72, 140, 173, 0.22),
+    0 12px 24px rgba(11, 54, 72, 0.2);
+  animation: timelineDateTenCrownGlow 2.5s ease-in-out infinite;
+}
+
+.timeline-date-ten-aqua-beam {
+  position: absolute;
+  top: 74px;
+  width: 44%;
+  height: 320px;
+  border-radius: 24px;
+  background:
+    linear-gradient(176deg, rgba(226, 246, 255, 0.44), rgba(170, 227, 250, 0.08) 52%, rgba(170, 227, 250, 0) 100%);
+  mix-blend-mode: screen;
+  filter: blur(0.4px);
+  opacity: 0.74;
+  transform: rotate(var(--beam-rot, 0deg));
+  animation: timelineDateTenBeamPulse 4.8s ease-in-out infinite;
+}
+
+.timeline-date-ten-aqua-beam.beam-left {
+  left: -10%;
+  --beam-rot: -8deg;
+}
+
+.timeline-date-ten-aqua-beam.beam-right {
+  right: -10%;
+  --beam-rot: 8deg;
+  animation-delay: 0.5s;
+}
+
+.timeline-date-ten-front-sparks {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 14;
+}
+
+.timeline-date-ten-front-sparks::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 14%, rgba(255, 227, 165, 0.28), transparent 38%),
+    linear-gradient(130deg, rgba(255, 255, 255, 0) 28%, rgba(201, 243, 255, 0.34) 49%, rgba(255, 255, 255, 0) 70%);
+  mix-blend-mode: screen;
+  opacity: 0.9;
+  animation: timelineDateTenFrontSweep 3.6s ease-in-out infinite;
+}
+
+.timeline-date-ten-front-sparks i {
+  position: absolute;
+  left: var(--day-ten-spark-x);
+  top: var(--day-ten-spark-y);
+  width: var(--day-ten-spark-size);
+  height: var(--day-ten-spark-size);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background:
+    radial-gradient(circle, rgba(255, 250, 234, 0.98), rgba(189, 242, 255, 0.64) 56%, rgba(113, 193, 222, 0.32) 78%, rgba(113, 193, 222, 0) 100%);
+  box-shadow:
+    0 0 16px rgba(197, 243, 255, 0.72),
+    0 0 30px rgba(143, 217, 239, 0.58);
+  opacity: 0;
+  animation: timelineDateTenSparkDrift var(--day-ten-spark-duration) ease-in-out infinite;
+  animation-delay: var(--day-ten-spark-delay);
+}
+
+.timeline-story-photo-stage-date-ten {
+  position: relative;
+  margin-bottom: 12px;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.timeline-story-photo-stage-date-ten::before {
+  content: "";
+  position: absolute;
+  inset: 4% 5%;
+  border-radius: 16px;
+  pointer-events: none;
+  z-index: 2;
+  background:
+    linear-gradient(
+      116deg,
+      rgba(255, 255, 255, 0) 16%,
+      rgba(214, 248, 255, 0.34) 44%,
+      rgba(255, 235, 186, 0.3) 58%,
+      rgba(255, 255, 255, 0) 80%
+    );
+  mix-blend-mode: screen;
+  opacity: 0.66;
+  animation: timelineDateTenLightSweep 5.2s ease-in-out infinite;
+}
+
+.timeline-story-photo.timeline-story-photo-day-ten {
+  position: relative;
+  margin: 0;
+  border-color: rgba(78, 153, 188, 0.48);
+  box-shadow:
+    0 15px 26px rgba(14, 62, 82, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.68),
+    0 0 0 1.5px rgba(210, 245, 255, 0.84);
+  background:
+    linear-gradient(150deg, rgba(227, 246, 255, 0.98), rgba(185, 224, 241, 0.94));
+}
+
+.timeline-story-photo.timeline-story-photo-day-ten::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 2;
+  border: 1px solid rgba(220, 247, 255, 0.84);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.3),
+    0 0 18px rgba(165, 234, 255, 0.4);
+  animation: timelineDateTenFrameGlow 2.5s ease-in-out infinite;
+}
+
+.timeline-story-photo.timeline-story-photo-day-ten img,
+.timeline-story-photo.timeline-story-photo-day-ten video {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: clamp(300px, 50vh, 460px);
+  max-height: none;
+  object-position: center center;
+  background:
+    radial-gradient(circle at 50% 12%, rgba(236, 250, 255, 0.88), rgba(182, 221, 239, 0.84));
+  animation: timelineDateTenMediaFloat 8.4s ease-in-out infinite;
+}
+
+.timeline-story-photo.timeline-story-photo-day-ten img {
+  object-fit: contain;
+}
+
+.timeline-story-photo.timeline-story-photo-day-ten.is-video video {
+  object-fit: cover;
+  background: rgba(10, 40, 55, 0.34);
+  animation:
+    timelineDateTenMediaFloat 10.8s ease-in-out infinite,
+    timelineDateTenVideoPulse 4.2s ease-in-out infinite;
+}
+
+.timeline-date-ten-media-counter {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  z-index: 12;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(88, 154, 186, 0.58);
+  background: rgba(224, 245, 253, 0.9);
+  color: rgba(23, 89, 116, 0.96);
+  padding: 4px 9px;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  font-family: "Cinzel", serif;
+}
+
+.timeline-date-ten-front-overlay {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 11;
+}
+
+.timeline-date-ten-camera-flash {
+  position: absolute;
+  inset: -4%;
+  z-index: 12;
+  pointer-events: none;
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 50% 44%, rgba(255, 255, 255, 0.98), rgba(218, 247, 255, 0.9) 30%, rgba(138, 215, 241, 0.42) 54%, rgba(138, 215, 241, 0) 74%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.56), rgba(255, 255, 255, 0));
+  mix-blend-mode: screen;
+  filter: blur(0.4px);
+}
+
+.timeline-date-ten-camera-flash::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(215, 248, 255, 0.9);
+  box-shadow:
+    0 0 28px rgba(191, 241, 255, 0.66),
+    inset 0 0 16px rgba(255, 255, 255, 0.36);
+  opacity: 0.9;
+}
+
+.timeline-date-ten-front-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 24% 18%, rgba(209, 247, 255, 0.28), transparent 26%),
+    radial-gradient(circle at 78% 20%, rgba(246, 228, 178, 0.2), transparent 22%),
+    radial-gradient(circle at 60% 72%, rgba(170, 228, 246, 0.18), transparent 30%);
+  mix-blend-mode: screen;
+  animation: timelineDateTenFrontSweep 3.9s ease-in-out infinite;
+}
+
+.timeline-date-ten-front-overlay i {
+  position: absolute;
+  left: var(--day-ten-front-x);
+  top: var(--day-ten-front-y);
+  width: var(--day-ten-front-size);
+  height: var(--day-ten-front-size);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background:
+    radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.98), rgba(205, 246, 255, 0.78) 54%, rgba(113, 198, 228, 0.32) 72%, rgba(113, 198, 228, 0) 100%);
+  box-shadow:
+    0 0 20px rgba(188, 241, 255, 0.74),
+    0 0 34px rgba(145, 221, 245, 0.56);
+  opacity: 0;
+  animation: timelineDateTenFrontSpark var(--day-ten-front-duration) ease-in-out infinite;
+  animation-delay: var(--day-ten-front-delay);
+}
+
+.timeline-date-ten-media-controls {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+  z-index: 13;
+  pointer-events: none;
+}
+
+.timeline-date-ten-media-arrow {
+  pointer-events: auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(76, 151, 185, 0.68);
+  background: rgba(220, 244, 253, 0.9);
+  color: rgba(22, 87, 113, 0.96);
+  font-family: "Cinzel", serif;
+  font-size: 1.3rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 8px 18px rgba(11, 55, 73, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  animation: timelineDateTenArrowPulse 2s ease-in-out infinite;
+}
+
+.timeline-date-ten-media-arrow:hover {
+  transform: translateY(-1px) scale(1.04);
+  border-color: rgba(95, 178, 216, 0.84);
+  box-shadow:
+    0 10px 22px rgba(9, 48, 64, 0.38),
+    0 0 14px rgba(174, 237, 255, 0.6);
+}
+
+.timeline-story-day.is-date-ten-day {
+  border-color: rgba(72, 150, 182, 0.5);
+  background:
+    radial-gradient(circle at 20% 24%, rgba(232, 249, 255, 0.94), transparent 56%),
+    rgba(205, 236, 248, 0.96);
+  color: rgba(23, 89, 116, 0.95);
+  box-shadow:
+    0 4px 12px rgba(18, 87, 112, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.timeline-story-card.is-date-ten-card h3 {
+  color: #1a6280;
+  text-shadow:
+    0 1px 0 rgba(248, 254, 255, 0.96),
+    0 0 10px rgba(178, 239, 255, 0.52);
+}
+
+.timeline-story-card.is-date-ten-card .timeline-story-date {
+  color: rgba(27, 101, 129, 0.92);
+}
+
+.timeline-story-card.is-date-ten-card p:not(.timeline-story-date) {
+  color: rgba(18, 75, 97, 0.93);
+}
+
+.timeline-story-card.is-date-ten-card .timeline-content-tags span {
+  border-color: rgba(81, 154, 184, 0.34);
+  background: rgba(216, 241, 251, 0.92);
+  color: rgba(20, 82, 106, 0.94);
 }
 
 .timeline-floor-modal.is-date-eight-modal {
@@ -8828,6 +9208,27 @@ body.motion-soft .section-room-music-fx {
   z-index: 1;
 }
 
+.timeline-floor-modal-backdrop.is-date-ten-backdrop {
+  background:
+    radial-gradient(circle at 50% 16%, rgba(171, 240, 255, 0.2), rgba(7, 34, 46, 0.84)),
+    rgba(4, 22, 32, 0.62);
+}
+
+.timeline-floor-modal-backdrop.is-date-ten-backdrop::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(4, 29, 40, 0) 16%, rgba(4, 21, 30, 0.62) 66%, rgba(3, 12, 19, 0.88) 100%),
+    linear-gradient(180deg, rgba(193, 244, 255, 0.14), rgba(193, 244, 255, 0));
+}
+
+.timeline-floor-modal-backdrop.is-date-ten-backdrop > * {
+  position: relative;
+  z-index: 1;
+}
+
 .timeline-floor-modal {
   width: min(620px, calc(100% - 8px));
   max-height: calc(100% - 10px);
@@ -8961,6 +9362,16 @@ body.motion-soft .section-room-music-fx {
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
+.timeline-floor-modal.is-date-ten-modal {
+  border-color: rgba(72, 149, 181, 0.48);
+  background:
+    radial-gradient(circle at 86% 10%, rgba(194, 244, 255, 0.4), transparent 48%),
+    linear-gradient(155deg, rgba(232, 248, 255, 0.98), rgba(184, 223, 241, 0.96));
+  box-shadow:
+    0 30px 54px rgba(8, 54, 71, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
 .timeline-floor-modal-close.is-nature-day {
   border-color: rgba(83, 130, 73, 0.4);
   background: rgba(241, 251, 230, 0.92);
@@ -9058,6 +9469,17 @@ body.motion-soft .section-room-music-fx {
 .timeline-floor-modal-close.is-date-nine-day:hover {
   border-color: rgba(126, 163, 212, 0.66);
   box-shadow: 0 10px 14px rgba(52, 83, 133, 0.3);
+}
+
+.timeline-floor-modal-close.is-date-ten-day {
+  border-color: rgba(76, 151, 183, 0.5);
+  background: rgba(219, 244, 253, 0.95);
+  color: rgba(22, 85, 109, 0.96);
+}
+
+.timeline-floor-modal-close.is-date-ten-day:hover {
+  border-color: rgba(95, 177, 214, 0.68);
+  box-shadow: 0 10px 14px rgba(21, 89, 112, 0.32);
 }
 
 .timeline-floor-modal-nav {
@@ -9254,6 +9676,27 @@ body.motion-soft .section-room-music-fx {
 
 .timeline-floor-modal-nav.is-date-nine-day .button.ghost:hover {
   background: rgba(208, 225, 250, 0.98);
+  box-shadow: none;
+}
+
+.timeline-floor-modal-nav.is-date-ten-day .button {
+  background: linear-gradient(135deg, #2580a4, #1a5f79);
+  box-shadow: 0 12px 20px rgba(18, 85, 108, 0.44);
+}
+
+.timeline-floor-modal-nav.is-date-ten-day .button:hover {
+  box-shadow: 0 14px 24px rgba(15, 73, 92, 0.46);
+}
+
+.timeline-floor-modal-nav.is-date-ten-day .button.ghost {
+  color: rgba(22, 87, 112, 0.96);
+  border-color: rgba(82, 153, 184, 0.56);
+  background: rgba(219, 243, 252, 0.92);
+  box-shadow: none;
+}
+
+.timeline-floor-modal-nav.is-date-ten-day .button.ghost:hover {
+  background: rgba(199, 232, 245, 0.98);
   box-shadow: none;
 }
 
@@ -10667,6 +11110,195 @@ body.motion-soft .section-room-music-fx {
   }
 }
 
+@keyframes timelineDateTenAmbientPulse {
+  0%,
+  100% {
+    opacity: 0.84;
+    transform: scale(1);
+    filter: saturate(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+    filter: saturate(1.1);
+  }
+}
+
+@keyframes timelineDateTenCrownGlow {
+  0%,
+  100% {
+    box-shadow:
+      inset 0 0 0 3px rgba(235, 249, 255, 0.34),
+      inset 0 -18px 24px rgba(72, 140, 173, 0.2),
+      0 12px 24px rgba(11, 54, 72, 0.18);
+    filter: saturate(0.96) brightness(0.98);
+  }
+  50% {
+    box-shadow:
+      inset 0 0 0 3px rgba(245, 253, 255, 0.5),
+      inset 0 -16px 22px rgba(87, 160, 193, 0.26),
+      0 14px 30px rgba(13, 66, 87, 0.26);
+    filter: saturate(1.08) brightness(1.06);
+  }
+}
+
+@keyframes timelineDateTenBeamPulse {
+  0%,
+  100% {
+    opacity: 0.62;
+    transform: translateY(0) rotate(var(--beam-rot, 0deg));
+  }
+  50% {
+    opacity: 0.94;
+    transform: translateY(-3px) rotate(var(--beam-rot, 0deg));
+  }
+}
+
+@keyframes timelineDateTenSparkDrift {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(0.4);
+    opacity: 0;
+  }
+  26% {
+    transform: translate(
+        calc(-50% + (var(--day-ten-spark-drift) * -0.28)),
+        calc(-50% - (var(--day-ten-spark-rise) * 0.24))
+      )
+      scale(1);
+    opacity: var(--day-ten-spark-alpha, 0.52);
+  }
+  64% {
+    transform: translate(
+        calc(-50% + (var(--day-ten-spark-drift) * 0.22)),
+        calc(-50% - (var(--day-ten-spark-rise) * 0.62))
+      )
+      scale(0.82);
+    opacity: calc(var(--day-ten-spark-alpha, 0.52) * 0.74);
+  }
+  100% {
+    transform: translate(
+        calc(-50% + var(--day-ten-spark-drift)),
+        calc(-50% - var(--day-ten-spark-rise))
+      )
+      scale(0.48);
+    opacity: 0;
+  }
+}
+
+@keyframes timelineDateTenLightSweep {
+  0%,
+  100% {
+    transform: translate3d(-16%, -2%, 0) rotate(-1deg);
+    opacity: 0.24;
+  }
+  45% {
+    transform: translate3d(10%, 2%, 0) rotate(0.9deg);
+    opacity: 0.62;
+  }
+  75% {
+    transform: translate3d(21%, 0, 0) rotate(1.2deg);
+    opacity: 0.38;
+  }
+}
+
+@keyframes timelineDateTenFrameGlow {
+  0%,
+  100% {
+    border-color: rgba(220, 247, 255, 0.8);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.26),
+      0 0 14px rgba(165, 234, 255, 0.28);
+  }
+  50% {
+    border-color: rgba(234, 251, 255, 0.96);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.4),
+      0 0 24px rgba(174, 239, 255, 0.46);
+  }
+}
+
+@keyframes timelineDateTenMediaFloat {
+  0%,
+  100% {
+    transform: scale(1.01) translate3d(0, 0, 0);
+    filter: saturate(1.02) brightness(0.98);
+  }
+  50% {
+    transform: scale(1.04) translate3d(0, -2px, 0);
+    filter: saturate(1.12) brightness(1.06);
+  }
+}
+
+@keyframes timelineDateTenVideoPulse {
+  0%,
+  100% {
+    filter: saturate(1.03) brightness(0.98) contrast(1.01);
+  }
+  55% {
+    filter: saturate(1.17) brightness(1.06) contrast(1.05);
+  }
+}
+
+@keyframes timelineDateTenFrontSpark {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(0.35);
+    opacity: 0;
+  }
+  24% {
+    transform: translate(
+        calc(-50% + (var(--day-ten-front-drift) * -0.25)),
+        calc(-50% - (var(--day-ten-front-rise) * 0.24))
+      )
+      scale(1);
+    opacity: var(--day-ten-front-alpha, 0.6);
+  }
+  62% {
+    transform: translate(
+        calc(-50% + (var(--day-ten-front-drift) * 0.24)),
+        calc(-50% - (var(--day-ten-front-rise) * 0.66))
+      )
+      scale(0.8);
+    opacity: calc(var(--day-ten-front-alpha, 0.6) * 0.76);
+  }
+  100% {
+    transform: translate(
+        calc(-50% + var(--day-ten-front-drift)),
+        calc(-50% - var(--day-ten-front-rise))
+      )
+      scale(0.5);
+    opacity: 0;
+  }
+}
+
+@keyframes timelineDateTenFrontSweep {
+  0%,
+  100% {
+    opacity: 0.46;
+    transform: translate3d(-6px, 0, 0);
+  }
+  50% {
+    opacity: 0.96;
+    transform: translate3d(6px, -2px, 0);
+  }
+}
+
+@keyframes timelineDateTenArrowPulse {
+  0%,
+  100% {
+    box-shadow:
+      0 8px 18px rgba(11, 55, 73, 0.32),
+      inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  }
+  50% {
+    box-shadow:
+      0 10px 22px rgba(9, 48, 64, 0.38),
+      0 0 12px rgba(184, 241, 255, 0.58),
+      inset 0 1px 0 rgba(255, 255, 255, 0.96);
+  }
+}
+
 @keyframes timelineNatureBloom {
   0%,
   100% {
@@ -11218,6 +11850,7 @@ body.motion-soft .section-room-music-fx {
   .timeline-floor-modal-backdrop.is-date-seven-backdrop::before,
   .timeline-floor-modal-backdrop.is-date-eight-backdrop::before,
   .timeline-floor-modal-backdrop.is-date-nine-backdrop::before,
+  .timeline-floor-modal-backdrop.is-date-ten-backdrop::before,
   .timeline-date-three-marquee-lights,
   .timeline-date-three-projector,
   .timeline-date-three-projector::before,
@@ -11272,6 +11905,18 @@ body.motion-soft .section-room-music-fx {
   .timeline-story-photo.timeline-story-photo-day-nine img,
   .timeline-story-photo.timeline-story-photo-day-nine video,
   .timeline-date-nine-media-arrow,
+  .timeline-date-ten-ambient,
+  .timeline-date-ten-crown-halo,
+  .timeline-date-ten-aqua-beam,
+  .timeline-date-ten-front-sparks::before,
+  .timeline-date-ten-front-sparks i,
+  .timeline-date-ten-front-overlay::before,
+  .timeline-date-ten-front-overlay i,
+  .timeline-story-photo-stage-date-ten::before,
+  .timeline-story-photo.timeline-story-photo-day-ten::after,
+  .timeline-story-photo.timeline-story-photo-day-ten img,
+  .timeline-story-photo.timeline-story-photo-day-ten video,
+  .timeline-date-ten-media-arrow,
   .timeline-nature-leaves i,
   .timeline-date-two-moon,
   .timeline-date-two-star-rain i,
@@ -11308,7 +11953,8 @@ body.motion-soft .section-room-music-fx {
 .timeline-bridgerton-section.is-runtime-safe .timeline-floor-modal-backdrop.is-date-six-backdrop::before,
 .timeline-bridgerton-section.is-runtime-safe .timeline-floor-modal-backdrop.is-date-seven-backdrop::before,
 .timeline-bridgerton-section.is-runtime-safe .timeline-floor-modal-backdrop.is-date-eight-backdrop::before,
-.timeline-bridgerton-section.is-runtime-safe .timeline-floor-modal-backdrop.is-date-nine-backdrop::before {
+.timeline-bridgerton-section.is-runtime-safe .timeline-floor-modal-backdrop.is-date-nine-backdrop::before,
+.timeline-bridgerton-section.is-runtime-safe .timeline-floor-modal-backdrop.is-date-ten-backdrop::before {
   display: none;
 }
 
@@ -11353,7 +11999,10 @@ body.motion-soft .section-room-music-fx {
 .timeline-bridgerton-section.is-runtime-safe .timeline-date-eight-dust-front,
 .timeline-bridgerton-section.is-runtime-safe .timeline-date-nine-antechamber,
 .timeline-bridgerton-section.is-runtime-safe .timeline-date-nine-sparks-front,
-.timeline-bridgerton-section.is-runtime-safe .timeline-date-nine-front-overlay {
+.timeline-bridgerton-section.is-runtime-safe .timeline-date-nine-front-overlay,
+.timeline-bridgerton-section.is-runtime-safe .timeline-date-ten-crownroom,
+.timeline-bridgerton-section.is-runtime-safe .timeline-date-ten-front-sparks,
+.timeline-bridgerton-section.is-runtime-safe .timeline-date-ten-front-overlay {
   display: none;
 }
 
@@ -11368,7 +12017,9 @@ body.motion-soft .section-room-music-fx {
 }
 
 .timeline-bridgerton-section.is-runtime-safe .timeline-story-photo-stage-date-nine::before,
-.timeline-bridgerton-section.is-runtime-safe .timeline-story-photo.timeline-story-photo-day-nine::after {
+.timeline-bridgerton-section.is-runtime-safe .timeline-story-photo.timeline-story-photo-day-nine::after,
+.timeline-bridgerton-section.is-runtime-safe .timeline-story-photo-stage-date-ten::before,
+.timeline-bridgerton-section.is-runtime-safe .timeline-story-photo.timeline-story-photo-day-ten::after {
   display: none;
 }
 
