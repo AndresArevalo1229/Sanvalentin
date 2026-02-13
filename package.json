@@ -9,6 +9,8 @@
     "dev:safe": "concurrently -k \"vite --host 0.0.0.0\" \"wait-on http://localhost:5173 && electron . --safe-render\"",
     "dev:win": "npm run dev",
     "dev:win:safe": "npm run dev:safe",
+    "dev:win:diag": "concurrently -k \"vite --host 0.0.0.0\" \"wait-on http://localhost:5173 && electron . --diagnostics --open-devtools\"",
+    "dev:win:diag:safe": "concurrently -k \"vite --host 0.0.0.0\" \"wait-on http://localhost:5173 && electron . --diagnostics --open-devtools --safe-render\"",
     "check:assets": "node scripts/check-assets.mjs",
     "build": "vite build",
     "dist": "npm run build && electron-builder",
@@ -17,6 +19,8 @@
     "dist:mac": "npm run build && electron-builder --mac dmg --universal",
     "start": "electron .",
     "start:safe": "electron . --safe-render",
+    "start:diag": "electron . --diagnostics --open-devtools",
+    "start:diag:safe": "electron . --diagnostics --open-devtools --safe-render",
     "preview": "vite preview"
   },
   "build": {

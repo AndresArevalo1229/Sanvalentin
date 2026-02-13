@@ -31,6 +31,18 @@ Modo desarrollo seguro en Windows (si ves pantalla negra/parpadeos):
 npm run dev:win:safe
 ```
 
+Modo diagnostico en Windows (abre DevTools y escribe warnings/errores en terminal y log):
+
+```bash
+npm run dev:win:diag
+```
+
+Modo diagnostico + safe render:
+
+```bash
+npm run dev:win:diag:safe
+```
+
 Archivos que genera:
 
 - `release/San Valentin Andrea Setup 1.0.0.exe` (instalador, incluye desinstalador)
@@ -52,6 +64,13 @@ npm run start:safe
 Log de diagnostico:
 
 - `%APPDATA%\\San Valentin Andrea\\runtime-diagnostics.log`
+
+Para app empaquetada tambien tienes:
+
+```bash
+npm run start:diag
+npm run start:diag:safe
+```
 
 ## 4) Build para macOS
 
