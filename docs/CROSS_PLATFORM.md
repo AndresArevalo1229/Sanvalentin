@@ -24,6 +24,11 @@ Archivos que genera:
 - `release/San Valentin Andrea Setup 1.0.0.exe` (instalador, incluye desinstalador)
 - `release/San Valentin Andrea 1.0.0.exe` (portable, no instala)
 
+Nota:
+
+- La configuracion actual usa `win.signAndEditExecutable=false` para evitar errores de permisos con symlinks de `winCodeSign` en Windows.
+- Si despues quieres firmado/edicion avanzada del `.exe`, normalmente hay que ejecutar terminal como Administrador o activar "Developer Mode" en Windows.
+
 ## 3) Si en Windows se traba o se pone negro
 
 Ejecuta en modo seguro (software render):
