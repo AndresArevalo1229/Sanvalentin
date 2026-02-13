@@ -7529,6 +7529,233 @@ body.motion-soft .section-room-music-fx {
   color: rgba(121, 43, 67, 0.92);
 }
 
+.timeline-story-card.is-date-six-card {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(71, 133, 151, 0.44);
+  background:
+    radial-gradient(circle at 86% 10%, rgba(198, 242, 255, 0.3), transparent 44%),
+    radial-gradient(circle at 12% 16%, rgba(215, 249, 255, 0.24), transparent 42%),
+    linear-gradient(156deg, rgba(244, 253, 255, 0.99), rgba(215, 238, 245, 0.96));
+  box-shadow:
+    0 22px 36px rgba(20, 53, 68, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    inset 0 -22px 32px rgba(82, 151, 173, 0.16);
+}
+
+.timeline-story-card.is-date-six-card > :not(.timeline-date-six-water):not(.timeline-date-six-bubbles-front) {
+  position: relative;
+  z-index: 2;
+}
+
+.timeline-date-six-water {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 7;
+  opacity: 0.74;
+  mix-blend-mode: screen;
+}
+
+.timeline-date-six-water::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 52% 10%, rgba(255, 247, 224, 0.5), transparent 44%),
+    linear-gradient(180deg, rgba(80, 171, 202, 0.2), rgba(80, 171, 202, 0) 52%);
+}
+
+.timeline-date-six-water::after {
+  content: "";
+  position: absolute;
+  left: -12%;
+  right: -12%;
+  bottom: -82px;
+  height: 150px;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at center, rgba(115, 206, 230, 0.3), rgba(115, 206, 230, 0) 70%);
+  filter: blur(1.3px);
+}
+
+.timeline-date-six-water-haze {
+  position: absolute;
+  inset: -18%;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(161, 234, 247, 0.44), transparent 56%),
+    radial-gradient(circle at 82% 20%, rgba(197, 246, 255, 0.32), transparent 58%),
+    radial-gradient(circle at 44% 74%, rgba(122, 194, 218, 0.34), transparent 62%);
+  animation: timelineDateSixWaterDrift 9.8s ease-in-out infinite;
+}
+
+.timeline-date-six-light-shafts {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      103deg,
+      rgba(255, 255, 255, 0) 18%,
+      rgba(234, 251, 255, 0.44) 36%,
+      rgba(255, 255, 255, 0) 58%
+    );
+  mix-blend-mode: screen;
+  opacity: 0.7;
+  animation: timelineDateSixLightShift 6.6s ease-in-out infinite;
+}
+
+.timeline-date-six-ripples {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.timeline-date-six-ripples i {
+  position: absolute;
+  left: var(--ripple-x);
+  top: var(--ripple-y);
+  width: var(--ripple-size);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0.72);
+  border: 1.8px solid rgba(221, 252, 255, 0.84);
+  box-shadow:
+    0 0 0 1px rgba(121, 196, 219, 0.26),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+  opacity: var(--ripple-alpha, 0.26);
+  filter: blur(0.1px);
+  animation: timelineDateSixRipplePulse var(--ripple-duration) ease-in-out infinite;
+  animation-delay: var(--ripple-delay);
+}
+
+.timeline-date-six-bubbles-front {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 8;
+}
+
+.timeline-date-six-bubbles-front i {
+  position: absolute;
+  left: var(--bubble-x);
+  top: var(--bubble-y);
+  width: var(--bubble-size);
+  height: var(--bubble-size);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  border: 1.5px solid rgba(225, 252, 255, 0.92);
+  background: radial-gradient(circle at 32% 30%, rgba(255, 255, 255, 0.9), rgba(203, 241, 255, 0.08) 68%, rgba(203, 241, 255, 0) 100%);
+  box-shadow:
+    inset -1px -1px 0 rgba(120, 189, 214, 0.34),
+    0 0 20px rgba(172, 234, 250, 0.44);
+  opacity: 0;
+  animation: timelineDateSixBubbleRise var(--bubble-duration) linear infinite;
+  animation-delay: var(--bubble-delay);
+}
+
+.timeline-date-six-bubbles-front i::before {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  width: 28%;
+  height: 28%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  opacity: 0.8;
+}
+
+.timeline-story-day.is-date-six-day {
+  border-color: rgba(82, 145, 164, 0.46);
+  background:
+    radial-gradient(circle at 20% 24%, rgba(235, 251, 255, 0.9), transparent 56%),
+    rgba(224, 246, 252, 0.95);
+  color: rgba(34, 93, 111, 0.95);
+  box-shadow:
+    0 4px 12px rgba(37, 98, 119, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.timeline-story-card.is-date-six-card h3 {
+  color: #1f6781;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.92),
+    0 0 10px rgba(155, 223, 244, 0.52);
+}
+
+.timeline-story-card.is-date-six-card .timeline-story-date {
+  color: rgba(34, 102, 123, 0.9);
+}
+
+.timeline-story-card.is-date-six-card .timeline-story-photo {
+  position: relative;
+  isolation: isolate;
+  border-color: rgba(75, 140, 160, 0.38);
+  box-shadow:
+    0 12px 24px rgba(26, 72, 88, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.56),
+    0 0 0 1.5px rgba(209, 240, 248, 0.84);
+  background:
+    linear-gradient(150deg, rgba(238, 251, 255, 0.95), rgba(208, 234, 243, 0.9));
+}
+
+.timeline-story-card.is-date-six-card .timeline-story-photo::before,
+.timeline-story-card.is-date-six-card .timeline-story-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.timeline-story-card.is-date-six-card .timeline-story-photo::before {
+  z-index: 2;
+  border: 1.4px solid rgba(214, 248, 255, 0.72);
+  box-shadow:
+    inset 0 0 0 1px rgba(137, 205, 226, 0.4),
+    0 0 20px rgba(173, 232, 247, 0.46);
+  animation: timelineDateSixPhotoEdgeGlow 3.8s ease-in-out infinite;
+}
+
+.timeline-story-card.is-date-six-card .timeline-story-photo::after {
+  z-index: 3;
+  inset: -20% -24%;
+  background:
+    radial-gradient(circle at 18% 28%, rgba(236, 252, 255, 0.56), transparent 38%),
+    radial-gradient(circle at 82% 34%, rgba(202, 243, 255, 0.42), transparent 36%),
+    linear-gradient(
+      112deg,
+      rgba(255, 255, 255, 0) 30%,
+      rgba(228, 252, 255, 0.5) 46%,
+      rgba(255, 255, 255, 0) 62%
+    );
+  mix-blend-mode: screen;
+  opacity: 0.52;
+  animation: timelineDateSixPhotoSparkSweep 6.2s ease-in-out infinite;
+}
+
+.timeline-story-card.is-date-six-card .timeline-story-photo img {
+  position: relative;
+  z-index: 1;
+  height: clamp(300px, 50vh, 470px);
+  max-height: none;
+  object-fit: cover;
+  object-position: center 35%;
+}
+
+.timeline-story-card.is-date-six-card p:not(.timeline-story-date) {
+  color: rgba(24, 73, 87, 0.92);
+}
+
+.timeline-story-card.is-date-six-card .timeline-content-tags span {
+  border-color: rgba(78, 145, 166, 0.3);
+  background: rgba(229, 248, 253, 0.92);
+  color: rgba(29, 87, 104, 0.94);
+}
+
 .timeline-floor-modal-backdrop {
   position: absolute;
   inset: 0;
@@ -7602,6 +7829,27 @@ body.motion-soft .section-room-music-fx {
 }
 
 .timeline-floor-modal-backdrop.is-date-five-backdrop > * {
+  position: relative;
+  z-index: 1;
+}
+
+.timeline-floor-modal-backdrop.is-date-six-backdrop {
+  background:
+    radial-gradient(circle at 50% 18%, rgba(160, 226, 247, 0.18), rgba(8, 28, 42, 0.76)),
+    rgba(6, 20, 34, 0.58);
+}
+
+.timeline-floor-modal-backdrop.is-date-six-backdrop::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 52%, rgba(11, 32, 44, 0) 16%, rgba(9, 24, 35, 0.56) 66%, rgba(4, 13, 20, 0.84) 100%),
+    linear-gradient(180deg, rgba(180, 237, 255, 0.12), rgba(180, 237, 255, 0));
+}
+
+.timeline-floor-modal-backdrop.is-date-six-backdrop > * {
   position: relative;
   z-index: 1;
 }
@@ -7699,6 +7947,16 @@ body.motion-soft .section-room-music-fx {
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
+.timeline-floor-modal.is-date-six-modal {
+  border-color: rgba(77, 142, 162, 0.42);
+  background:
+    radial-gradient(circle at 86% 10%, rgba(183, 234, 249, 0.44), transparent 48%),
+    linear-gradient(155deg, rgba(242, 252, 255, 0.98), rgba(210, 236, 245, 0.95));
+  box-shadow:
+    0 30px 54px rgba(13, 39, 52, 0.44),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
 .timeline-floor-modal-close.is-nature-day {
   border-color: rgba(83, 130, 73, 0.4);
   background: rgba(241, 251, 230, 0.92);
@@ -7752,6 +8010,17 @@ body.motion-soft .section-room-music-fx {
 .timeline-floor-modal-close.is-date-five-day:hover {
   border-color: rgba(205, 119, 141, 0.66);
   box-shadow: 0 10px 14px rgba(136, 55, 82, 0.3);
+}
+
+.timeline-floor-modal-close.is-date-six-day {
+  border-color: rgba(79, 146, 166, 0.46);
+  background: rgba(225, 247, 253, 0.94);
+  color: rgba(29, 87, 104, 0.95);
+}
+
+.timeline-floor-modal-close.is-date-six-day:hover {
+  border-color: rgba(94, 170, 194, 0.66);
+  box-shadow: 0 10px 14px rgba(37, 102, 122, 0.3);
 }
 
 .timeline-floor-modal-nav {
@@ -7864,6 +8133,27 @@ body.motion-soft .section-room-music-fx {
 
 .timeline-floor-modal-nav.is-date-five-day .button.ghost:hover {
   background: rgba(251, 222, 233, 0.98);
+  box-shadow: none;
+}
+
+.timeline-floor-modal-nav.is-date-six-day .button {
+  background: linear-gradient(135deg, #2f89a8, #1f6178);
+  box-shadow: 0 12px 20px rgba(27, 79, 98, 0.4);
+}
+
+.timeline-floor-modal-nav.is-date-six-day .button:hover {
+  box-shadow: 0 14px 24px rgba(24, 68, 85, 0.42);
+}
+
+.timeline-floor-modal-nav.is-date-six-day .button.ghost {
+  color: rgba(31, 90, 108, 0.95);
+  border-color: rgba(83, 150, 172, 0.52);
+  background: rgba(222, 246, 252, 0.9);
+  box-shadow: none;
+}
+
+.timeline-floor-modal-nav.is-date-six-day .button.ghost:hover {
+  background: rgba(202, 234, 243, 0.98);
   box-shadow: none;
 }
 
@@ -8726,6 +9016,103 @@ body.motion-soft .section-room-music-fx {
   }
 }
 
+@keyframes timelineDateSixWaterDrift {
+  0%,
+  100% {
+    transform: translate3d(-8px, -6px, 0) scale(1);
+    opacity: 0.92;
+  }
+  50% {
+    transform: translate3d(10px, 8px, 0) scale(1.05);
+    opacity: 1;
+  }
+}
+
+@keyframes timelineDateSixLightShift {
+  0%,
+  100% {
+    transform: translateX(-10%) skewX(-4deg);
+    opacity: 0.34;
+  }
+  50% {
+    transform: translateX(12%) skewX(-2deg);
+    opacity: 0.64;
+  }
+}
+
+@keyframes timelineDateSixRipplePulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.44);
+    opacity: 0;
+  }
+  18% {
+    opacity: var(--ripple-alpha, 0.24);
+  }
+  74% {
+    opacity: calc(var(--ripple-alpha, 0.24) * 0.76);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.18);
+    opacity: 0;
+  }
+}
+
+@keyframes timelineDateSixBubbleRise {
+  0%,
+  12% {
+    transform: translate(-50%, -50%) scale(0.72);
+    opacity: 0;
+  }
+  22% {
+    opacity: var(--bubble-alpha, 0.3);
+  }
+  64% {
+    transform: translate(
+        calc(-50% + (var(--bubble-drift) * -0.4)),
+        calc(-50% - (var(--bubble-rise) * 0.52))
+      )
+      scale(1);
+    opacity: calc(var(--bubble-alpha, 0.3) * 0.88);
+  }
+  100% {
+    transform: translate(calc(-50% + var(--bubble-drift)), calc(-50% - var(--bubble-rise)))
+      scale(0.86);
+    opacity: 0;
+  }
+}
+
+@keyframes timelineDateSixPhotoEdgeGlow {
+  0%,
+  100% {
+    border-color: rgba(214, 248, 255, 0.56);
+    box-shadow:
+      inset 0 0 0 1px rgba(137, 205, 226, 0.3),
+      0 0 14px rgba(173, 232, 247, 0.28);
+  }
+  50% {
+    border-color: rgba(237, 252, 255, 0.88);
+    box-shadow:
+      inset 0 0 0 1px rgba(162, 219, 236, 0.52),
+      0 0 24px rgba(176, 236, 250, 0.52);
+  }
+}
+
+@keyframes timelineDateSixPhotoSparkSweep {
+  0%,
+  100% {
+    transform: translate3d(-8%, -4%, 0) rotate(-2deg);
+    opacity: 0.34;
+  }
+  45% {
+    transform: translate3d(6%, 3%, 0) rotate(1.5deg);
+    opacity: 0.58;
+  }
+  75% {
+    transform: translate3d(14%, -2%, 0) rotate(2.5deg);
+    opacity: 0.42;
+  }
+}
+
 @keyframes timelineNatureBloom {
   0%,
   100% {
@@ -9264,6 +9651,7 @@ body.motion-soft .section-room-music-fx {
   .timeline-floor-modal-backdrop.is-date-three-backdrop::before,
   .timeline-floor-modal-backdrop.is-date-four-backdrop::before,
   .timeline-floor-modal-backdrop.is-date-five-backdrop::before,
+  .timeline-floor-modal-backdrop.is-date-six-backdrop::before,
   .timeline-date-three-marquee-lights,
   .timeline-date-three-projector,
   .timeline-date-three-projector::before,
@@ -9284,6 +9672,12 @@ body.motion-soft .section-room-music-fx {
   .timeline-date-five-door-knob::after,
   .timeline-date-five-seal,
   .timeline-date-five-petals-front i,
+  .timeline-date-six-water-haze,
+  .timeline-date-six-light-shafts,
+  .timeline-date-six-ripples i,
+  .timeline-date-six-bubbles-front i,
+  .timeline-story-card.is-date-six-card .timeline-story-photo::before,
+  .timeline-story-card.is-date-six-card .timeline-story-photo::after,
   .timeline-nature-leaves i,
   .timeline-date-two-moon,
   .timeline-date-two-star-rain i,
@@ -9316,7 +9710,8 @@ body.motion-soft .section-room-music-fx {
 .timeline-bridgerton-section.is-runtime-safe .timeline-mini-map-shell::after,
 .timeline-bridgerton-section.is-runtime-safe .timeline-floor-modal-backdrop.is-date-three-backdrop::before,
 .timeline-bridgerton-section.is-runtime-safe .timeline-floor-modal-backdrop.is-date-four-backdrop::before,
-.timeline-bridgerton-section.is-runtime-safe .timeline-floor-modal-backdrop.is-date-five-backdrop::before {
+.timeline-bridgerton-section.is-runtime-safe .timeline-floor-modal-backdrop.is-date-five-backdrop::before,
+.timeline-bridgerton-section.is-runtime-safe .timeline-floor-modal-backdrop.is-date-six-backdrop::before {
   display: none;
 }
 
@@ -9353,7 +9748,14 @@ body.motion-soft .section-room-music-fx {
 .timeline-bridgerton-section.is-runtime-safe .timeline-date-three-cinema,
 .timeline-bridgerton-section.is-runtime-safe .timeline-date-four-concert,
 .timeline-bridgerton-section.is-runtime-safe .timeline-date-five-proposal,
-.timeline-bridgerton-section.is-runtime-safe .timeline-date-five-petals-front {
+.timeline-bridgerton-section.is-runtime-safe .timeline-date-five-petals-front,
+.timeline-bridgerton-section.is-runtime-safe .timeline-date-six-water,
+.timeline-bridgerton-section.is-runtime-safe .timeline-date-six-bubbles-front {
+  display: none;
+}
+
+.timeline-bridgerton-section.is-runtime-safe .timeline-story-card.is-date-six-card .timeline-story-photo::before,
+.timeline-bridgerton-section.is-runtime-safe .timeline-story-card.is-date-six-card .timeline-story-photo::after {
   display: none;
 }
 

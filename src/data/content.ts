@@ -111,6 +111,7 @@ const thirdDatePhoto = asset("photos/cita primera vez navideña/2fbdf4a3-3fe7-46
 const fourthDateMainPhoto = asset("photos/cita primera vez navideña/IMG_3384.jpg");
 const fourthDateAltPhoto = asset("photos/cita primera vez navideña/IMG_3382.jpg");
 const fifthDatePhoto = asset("photos/declaracion 10 de enero de 2025/1babefeb-6f68-49b0-b69b-ac7c4fce8858.jpeg");
+const sixthDatePhoto = asset("photos/balneario/IMG_3886.jpg");
 
 const photosPlayita: string[] = [
   asset("photos/playita/19957e32-3058-4da3-a0ec-4fd809f02e7b.jpeg"),
@@ -215,7 +216,8 @@ const data: ContentData = {
     {
       date: "5 de abril de 2025",
       title: "Balneario: juntos en todo momento",
-      text: "Ese dia en el balneario me marco mucho porque te vi enfrentar tus miedos y no te solte ni un segundo. Quise que sintieras mi mano, mi calma y mi apoyo en cada instante. Verte confiar en mi y sonreir al final fue de las cosas mas bonitas que me has regalado."
+      text: "Ese dia en el balneario me marco mucho porque te vi enfrentar tus miedos y no te solte ni un segundo. Quise que sintieras mi mano, mi calma y mi apoyo en cada instante. Verte confiar en mi y sonreir al final fue de las cosas mas bonitas que me has regalado.",
+      photo: sixthDatePhoto
     },
     {
       date: "Junio de 2025",

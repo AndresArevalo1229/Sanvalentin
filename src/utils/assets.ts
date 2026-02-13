@@ -1,4 +1,12 @@
-const normalizedAssetPath = (path: string): string => encodeURI(path.replace(/^\/+/, ""));
+const runtimeUnicodeForm = (): "NFC" | "NFD" => {
+  if (typeof navigator === "undefined") {
+    return "NFC";
+  }
+  return /windows/i.test(navigator.userAgent) ? "NFC" : "NFD";
+};
+
+const normalizedAssetPath = (path: string): string =>
+  encodeURI(path.replace(/^\/+/, "").normalize(runtimeUnicodeForm()));
 
 const assetBaseUrl =
   import.meta.env.PROD

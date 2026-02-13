@@ -147,6 +147,24 @@ const dayFivePetalSpecs = Array.from({ length: 12 }, (_, index) => ({
   rotate: -18 + (index % 7) * 9,
   alpha: 0.34 + (index % 4) * 0.12
 }));
+const daySixRippleSpecs = [
+  { id: "day-six-ripple-1", x: 18, y: 24, size: 170, delay: 0, duration: 8.2, alpha: 0.28 },
+  { id: "day-six-ripple-2", x: 72, y: 20, size: 210, delay: 1.2, duration: 8.8, alpha: 0.24 },
+  { id: "day-six-ripple-3", x: 28, y: 70, size: 190, delay: 0.8, duration: 9.3, alpha: 0.22 },
+  { id: "day-six-ripple-4", x: 78, y: 66, size: 164, delay: 2.4, duration: 8.6, alpha: 0.26 },
+  { id: "day-six-ripple-5", x: 52, y: 48, size: 226, delay: 1.8, duration: 9.6, alpha: 0.18 }
+];
+const daySixBubbleSpecs = Array.from({ length: 10 }, (_, index) => ({
+  id: `day-six-bubble-${index}`,
+  x: 10 + ((index * 17) % 78),
+  y: 110 + ((index * 7) % 22),
+  size: 14 + (index % 4) * 6,
+  delay: index * 0.58,
+  duration: 5.4 + (index % 4) * 0.9,
+  drift: (index % 2 === 0 ? 1 : -1) * (16 + (index % 3) * 7),
+  rise: 210 + (index % 4) * 52,
+  alpha: 0.3 + (index % 4) * 0.12
+}));
 const manorStarSpecs = Array.from({ length: 14 }, (_, index) => ({
   id: `star-${index}`,
   x: 6 + ((index * 29) % 88),
@@ -466,6 +484,7 @@ export default function TimelineSection({
   const isDateThreeDay = activeStep === 2;
   const isDateFourDay = activeStep === 3;
   const isDateFiveDay = activeStep === 4;
+  const isDateSixDay = activeStep === 5;
   const safeBeat = Math.min(1, Math.max(0, beat ?? 0));
   const dayFourEqBars = useMemo(() => {
     const bucketSource = audioLevels?.length ? audioLevels : [];
@@ -526,12 +545,16 @@ export default function TimelineSection({
         ? { opacity: 0, y: 14, scale: 0.97, filter: "blur(4px) saturate(0.82)" }
       : isDateFiveDay
         ? { opacity: 0, y: 16, scale: 0.972, filter: "blur(3px) saturate(0.85)" }
+      : isDateSixDay
+        ? { opacity: 0, y: 16, scale: 0.972, filter: "blur(3px) saturate(0.85)" }
       : { opacity: 0, y: 10 };
   const storyCardAnimate = isDateThreeDay
     ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px) saturate(1)" }
     : isDateFourDay
       ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px) saturate(1)" }
     : isDateFiveDay
+      ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px) saturate(1)" }
+    : isDateSixDay
       ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px) saturate(1)" }
     : { opacity: 1, y: 0 };
   const storyCardExit = reduceMotion
@@ -541,6 +564,8 @@ export default function TimelineSection({
       : isDateFourDay
         ? { opacity: 0, y: -8, scale: 0.985, filter: "blur(2px) saturate(0.86)" }
       : isDateFiveDay
+        ? { opacity: 0, y: -8, scale: 0.988, filter: "blur(2px) saturate(0.88)" }
+      : isDateSixDay
         ? { opacity: 0, y: -8, scale: 0.988, filter: "blur(2px) saturate(0.88)" }
       : { opacity: 0, y: -8 };
   const storyCardTransition = {
@@ -552,8 +577,10 @@ export default function TimelineSection({
         ? 0.3
       : isDateFiveDay
         ? 0.28
+      : isDateSixDay
+        ? 0.28
       : 0.22,
-    ease: isDateThreeDay || isDateFourDay || isDateFiveDay ? "easeInOut" : "easeOut"
+    ease: isDateThreeDay || isDateFourDay || isDateFiveDay || isDateSixDay ? "easeInOut" : "easeOut"
   } as const;
   const progress = (Math.max(activeStep + 1, 0) / totalSteps) * 100;
   const magicLevel = totalSteps > 1 ? Math.max(activeStep, 0) / (totalSteps - 1) : 0;
@@ -1157,7 +1184,8 @@ export default function TimelineSection({
                       "timeline-floor-modal-backdrop",
                       isDateThreeDay ? "is-date-three-backdrop" : "",
                       isDateFourDay ? "is-date-four-backdrop" : "",
-                      isDateFiveDay ? "is-date-five-backdrop" : ""
+                      isDateFiveDay ? "is-date-five-backdrop" : "",
+                      isDateSixDay ? "is-date-six-backdrop" : ""
                     ]
                       .filter(Boolean)
                       .join(" ")}
@@ -1174,7 +1202,8 @@ export default function TimelineSection({
                         isDateTwoDay ? "is-date-two-modal" : "",
                         isDateThreeDay ? "is-date-three-modal" : "",
                         isDateFourDay ? "is-date-four-modal" : "",
-                        isDateFiveDay ? "is-date-five-modal" : ""
+                        isDateFiveDay ? "is-date-five-modal" : "",
+                        isDateSixDay ? "is-date-six-modal" : ""
                       ]
                         .filter(Boolean)
                         .join(" ")}
@@ -1206,7 +1235,8 @@ export default function TimelineSection({
                             isDateTwoDay ? "is-date-two-day" : "",
                             isDateThreeDay ? "is-date-three-day" : "",
                             isDateFourDay ? "is-date-four-day" : "",
-                            isDateFiveDay ? "is-date-five-day" : ""
+                            isDateFiveDay ? "is-date-five-day" : "",
+                            isDateSixDay ? "is-date-six-day" : ""
                           ]
                             .filter(Boolean)
                             .join(" ")}
@@ -1221,7 +1251,8 @@ export default function TimelineSection({
                             isDateTwoDay ? "is-date-two-day" : "",
                             isDateThreeDay ? "is-date-three-day" : "",
                             isDateFourDay ? "is-date-four-day" : "",
-                            isDateFiveDay ? "is-date-five-day" : ""
+                            isDateFiveDay ? "is-date-five-day" : "",
+                            isDateSixDay ? "is-date-six-day" : ""
                           ]
                             .filter(Boolean)
                             .join(" ")}
@@ -1240,7 +1271,8 @@ export default function TimelineSection({
                             isDateTwoDay ? "is-date-two-card" : "",
                             isDateThreeDay ? "is-date-three-card" : "",
                             isDateFourDay ? "is-date-four-card" : "",
-                            isDateFiveDay ? "is-date-five-card" : ""
+                            isDateFiveDay ? "is-date-five-card" : "",
+                            isDateSixDay ? "is-date-six-card" : ""
                           ]
                             .filter(Boolean)
                             .join(" ")}
@@ -1418,6 +1450,50 @@ export default function TimelineSection({
                               ))}
                             </span>
                           ) : null}
+                          {isDateSixDay ? (
+                            <span className="timeline-date-six-water" aria-hidden="true">
+                              <span className="timeline-date-six-water-haze" />
+                              <span className="timeline-date-six-light-shafts" />
+                              <span className="timeline-date-six-ripples">
+                                {daySixRippleSpecs.map((ripple) => (
+                                  <i
+                                    key={ripple.id}
+                                    style={
+                                      {
+                                        ["--ripple-x" as string]: `${ripple.x}%`,
+                                        ["--ripple-y" as string]: `${ripple.y}%`,
+                                        ["--ripple-size" as string]: `${ripple.size}px`,
+                                        ["--ripple-delay" as string]: `${ripple.delay}s`,
+                                        ["--ripple-duration" as string]: `${ripple.duration}s`,
+                                        ["--ripple-alpha" as string]: `${ripple.alpha}`
+                                      } as CSSProperties
+                                    }
+                                  />
+                                ))}
+                              </span>
+                            </span>
+                          ) : null}
+                          {isDateSixDay ? (
+                            <span className="timeline-date-six-bubbles-front" aria-hidden="true">
+                              {daySixBubbleSpecs.map((bubble) => (
+                                <i
+                                  key={bubble.id}
+                                  style={
+                                    {
+                                      ["--bubble-x" as string]: `${bubble.x}%`,
+                                      ["--bubble-y" as string]: `${bubble.y}%`,
+                                      ["--bubble-size" as string]: `${bubble.size}px`,
+                                      ["--bubble-delay" as string]: `${bubble.delay}s`,
+                                      ["--bubble-duration" as string]: `${bubble.duration}s`,
+                                      ["--bubble-drift" as string]: `${bubble.drift}px`,
+                                      ["--bubble-rise" as string]: `${bubble.rise}px`,
+                                      ["--bubble-alpha" as string]: `${bubble.alpha}`
+                                    } as CSSProperties
+                                  }
+                                />
+                              ))}
+                            </span>
+                          ) : null}
                           {isDateFourDay && activePhotos.length > 1 ? (
                             <div className="timeline-story-photo-grid timeline-story-photo-grid-date-four">
                               {activePhotos.slice(0, 2).map((photo, index) => (
@@ -1469,7 +1545,8 @@ export default function TimelineSection({
                           isDateTwoDay ? "is-date-two-day" : "",
                           isDateThreeDay ? "is-date-three-day" : "",
                           isDateFourDay ? "is-date-four-day" : "",
-                          isDateFiveDay ? "is-date-five-day" : ""
+                          isDateFiveDay ? "is-date-five-day" : "",
+                          isDateSixDay ? "is-date-six-day" : ""
                         ]
                           .filter(Boolean)
                           .join(" ")}
