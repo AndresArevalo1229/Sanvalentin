@@ -21,6 +21,7 @@ import {
 } from "./data/content";
 import type { MusicSectionProps } from "./components/sections/MusicSection";
 import { shuffleList } from "./utils/collections";
+import { isWindowsRuntime } from "./utils/runtime";
 import { getRouteLocation, parseLocationRoute } from "./application/navigation/hashRouting";
 import {
   MOTION_INTENSITY_STORAGE_KEY,
@@ -79,9 +80,8 @@ export default function App() {
   const [roomAnimating, setRoomAnimating] = useState(false);
   const motionTimersRef = useRef<number[]>([]);
   const [motionIntensity, setMotionIntensity] = useState<MotionIntensity>(() => {
-    const isWindowsRuntime =
-      typeof navigator !== "undefined" && navigator.userAgent.toLowerCase().includes("windows");
-    const fallback = animationVariant === "suave" || isWindowsRuntime ? "soft" : "normal";
+    // Windows starts in soft mode by default to reduce GPU pressure in Electron builds.
+    const fallback = animationVariant === "suave" || isWindowsRuntime() ? "soft" : "normal";
     if (typeof window === "undefined") return fallback;
     const stored = window.localStorage.getItem(MOTION_INTENSITY_STORAGE_KEY);
     if (stored === "soft" || stored === "normal" || stored === "intense") return stored;

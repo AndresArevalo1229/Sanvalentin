@@ -90,14 +90,14 @@ const photosDeclaracion: string[] = [
 ];
 
 const photosAniversario: string[] = [
-  asset("photos/1 año de novios 10 de enero acuario michin /IMG_9108.jpeg"),
-  asset("photos/1 año de novios 10 de enero acuario michin /IMG_9116.jpeg"),
-  asset("photos/1 año de novios 10 de enero acuario michin /IMG_9119.jpeg"),
-  asset("photos/1 año de novios 10 de enero acuario michin /IMG_9127.jpeg"),
-  asset("photos/1 año de novios 10 de enero acuario michin /IMG_9138.jpeg"),
-  asset("photos/1 año de novios 10 de enero acuario michin /IMG_9141.jpeg"),
-  asset("photos/1 año de novios 10 de enero acuario michin /IMG_9146.jpeg"),
-  asset("photos/1 año de novios 10 de enero acuario michin /IMG_9147.jpeg")
+  asset("photos/1 año de novios 10 de enero acuario michin/IMG_9108.jpeg"),
+  asset("photos/1 año de novios 10 de enero acuario michin/IMG_9116.jpeg"),
+  asset("photos/1 año de novios 10 de enero acuario michin/IMG_9119.jpeg"),
+  asset("photos/1 año de novios 10 de enero acuario michin/IMG_9127.jpeg"),
+  asset("photos/1 año de novios 10 de enero acuario michin/IMG_9138.jpeg"),
+  asset("photos/1 año de novios 10 de enero acuario michin/IMG_9141.jpeg"),
+  asset("photos/1 año de novios 10 de enero acuario michin/IMG_9146.jpeg"),
+  asset("photos/1 año de novios 10 de enero acuario michin/IMG_9147.jpeg")
 ];
 
 const photosMomentos: string[] = [

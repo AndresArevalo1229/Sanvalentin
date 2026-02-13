@@ -5,6 +5,7 @@ import type { TimelineItem } from "../../data/content";
 import type { MotionIntensity } from "../../domain/animation/motionIntensity";
 import IconGlyph from "../ui/IconGlyph";
 import { timelineMiniGameAssets } from "../../assets/timeline-map";
+import { isWindowsElectronRuntime as detectWindowsElectronRuntime } from "../../utils/runtime";
 
 type TimelineSectionProps = {
   timeline: TimelineItem[];
@@ -428,11 +429,8 @@ export default function TimelineSection({
   motionIntensity = "normal"
 }: TimelineSectionProps) {
   const prefersReducedMotion = useReducedMotion();
-  const isWindowsElectronRuntime = useMemo(() => {
-    if (typeof navigator === "undefined") return false;
-    const userAgent = navigator.userAgent.toLowerCase();
-    return userAgent.includes("electron") && userAgent.includes("windows");
-  }, []);
+  // In Windows + Electron we can drop expensive effects when the user selects soft motion.
+  const isWindowsElectronRuntime = useMemo(() => detectWindowsElectronRuntime(), []);
   const useRuntimeSafeMode = isWindowsElectronRuntime && motionIntensity === "soft";
   const reduceMotion = Boolean(prefersReducedMotion || useRuntimeSafeMode);
   const timelineSteps = useMemo(() => normalizeTimeline(timeline), [timeline]);

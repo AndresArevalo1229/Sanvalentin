@@ -6,6 +6,8 @@ const runtimeLogFileName = "runtime-diagnostics.log";
 const isWindows = process.platform === "win32";
 const safeRenderRequested =
   process.argv.includes("--safe-render") || process.env.SVA_SAFE_RENDER === "1";
+// Keep hardware acceleration on by default for all OS.
+// Only force software rendering when explicitly requested in Windows.
 const useSoftwareRendering = isWindows && safeRenderRequested;
 
 const appendRuntimeLog = (message) => {
@@ -60,6 +62,7 @@ const createWindow = () => {
 };
 
 app.whenReady().then(() => {
+  // Same diagnostics file on both macOS and Windows under each OS userData folder.
   appendRuntimeLog(
     `startup platform=${process.platform} renderMode=${
       useSoftwareRendering ? "software-safe" : "hardware-default"
